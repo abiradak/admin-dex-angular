@@ -1,0 +1,764 @@
+<div class="match-sesstion mt-4">
+  <div class="container relative">
+    <div
+      *ngIf="!sesAuthenticate"
+      style="
+        width: calc(100% - 20vw);
+        min-height: 130px;
+        top: 50px;
+        left: 20vw;
+        position: absolute;
+        background: rgba(244, 67, 54, 0.91);
+        z-index: 9999;
+        height: 100%;
+      "
+      class="row p-0 m-0"
+    >
+      <div class="col">
+        <h3 class="text-center text-white p-2">Interface locked</h3>
+        <div class="text-center">
+          <button (click)="control()" class="btn btn-warning">
+            <i class="fa fa-check"></i>
+            Send Control Request
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-{{
+        manual == true ? 'success' : 'danger'
+      }}"
+      (click)="manual == true ? autoModeOn() : autoModeOff()"
+    >
+      Manual
+    </button>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card p-4 alert-primary">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card p-2 mb-3 ">
+                <div class="run-dashboard">
+                  <span><b>0 ENTER</b> = Dot Ball,</span>
+                  <span><b>1 ENTER</b> = 1 Run,</span>
+                  <span><b>2 ENTER</b> = 2 Run,</span>
+                  <span><b>3 ENTER</b> = 3 Run,</span>
+                  <span><b>4 ENTER</b> = 4 Run,</span>
+                  <span><b>5 ENTER</b> = 5 Run,</span>
+                  <span><b>6 ENTER</b> = 1 Run,</span>
+                  <span><b>N0 ENTER</b> = No Ball 0 Run,</span>
+                  <span><b>N1 ENTER</b> = No Ball 1 Run,</span>
+                  <span><b>N2 ENTER</b> = No Ball 2 Run,</span>
+                  <span><b>N3 ENTER</b> = No Ball 3 Run,</span>
+                  <span><b>N4 ENTER</b> = No Ball 4 Run,</span>
+                  <span><b>N5 ENTER</b> = No Ball 5 Run,</span>
+                  <span><b>N6 ENTER</b> = No Ball 6 Run,</span>
+                  <span><b>Wd0 ENTER</b> = Wide Ball 0 Run,</span>
+                  <span><b>Wd1 ENTER</b> = Wide Ball 1 Run,</span>
+                  <span><b>Wd2 ENTER</b> = Wide Ball 2 Run,</span>
+                  <span><b>Wd3 ENTER</b> = Wide Ball 3 Run,</span>
+                  <span><b>Wd4 ENTER</b> = Wide Ball 4 Run,</span>
+                  <span><b>W0 ENTER </b> = Wicket 0 Run,</span>
+                  <span><b>W1 ENTER</b> = Wicket 1 Run,</span>
+                  <span><b>W2 ENTER</b> = Wicket 2 Run,</span>
+                  <span><b>W3 ENTER</b> = Wicket 3 Run,</span>
+                  <span><b>W4 ENTER</b> = Wicket 4 Ru,</span>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+          <div class="row">
+
+            <!-- runs start -->
+            <div class="col-md-6">
+              <input
+                type="text"
+                placeholder="Run"
+                [(ngModel)]="run"
+                (keyup)="runManual($event)"
+                class="form-control form-group"
+              />
+
+              <div class="col-md-6">
+                <!-- <input
+                  type="text"
+                  [hidden]="isOut"
+                  placeholder="Outbatsman"
+                  [(ngModel)]="batsman"
+                  (keyup.enter)="newBatsman(batsman)"
+                  class="form-control form-group"
+                /> -->
+
+                <input
+                  type="text"
+                  placeholder="Bowler"
+                  [(ngModel)]="bowler"
+                  (keyup.enter)="newBowler(bowler)"
+                  class="form-control form-group"
+                />
+                <!-- <div class="card p-2">
+                <table class="table scrore-table table-bordered mb-0" cellpadding="0" cellspacing="0">
+                  <tbody>
+                    <tr>
+                      <td><input type="button" value="0" (click)="setballbyrun('0', 'normal', '0')"></td>
+                      <td><input type="button" value="1" (click)="setballbyrun('1' , 'normal', '1')"></td>
+                      <td><input type="button" value="2" (click)="setballbyrun('2', 'normal', '2')"></td>
+                      <td><input type="button" value="3" (click)="setballbyrun('3','normal', '3')"></td>
+                      <td><input type="button" value="4" (click)="setballbyrun('4', 'normal', '4')"></td>
+                    </tr>
+                    <tr>
+                      <td><input type="button" value="5" (click)="setballbyrun('5', 'normal', '5')"></td>
+                      <td><input type="button" value="6" (click)="setballbyrun('6', 'normal', '6')"></td>
+                      <td><input type="button" value="N" (click)="setballbyrun('N', 'no', '0')"></td>
+                      <td><input type="button" value="N1" (click)="setballbyrun('N1', 'no', '1')"></td>
+                      <td><input type="button" value="N2" (click)="setballbyrun('N2', 'no', '2')"></td>
+                      
+                    </tr>
+                    <tr>
+                      <td><input type="button" value="N3" (click)="setballbyrun('N3', 'no', '3')"></td>
+                      <td><input type="button" value="N4" (click)="setballbyrun('N4', 'no', '4')"></td>
+                      <td><input type="button" value="N5" (click)="setballbyrun('N5', 'no', '5')"></td>
+                      <td><input type="button" value="N6" (click)="setballbyrun('N6', 'no', '6')"></td>
+                      <td><input type="button" value="Wd" (click)="setballbyrun('Wd', 'wide', '0')"></td>
+                    </tr>
+                    <tr>
+                    
+                      <td><input type="button" value="Wd1" (click)="setballbyrun('Wd1', 'wide', '1')"></td>
+                      <td><input type="button" value="Wd2" (click)="setballbyrun('Wd', 'wide', '2')"></td>
+                      <td><input type="button" value="Wd3" (click)="setballbyrun('Wd3', 'wide', '3')"></td>
+                      <td><input type="button" value="Wd4" (click)="setballbyrun('Wd4', 'wide', '4')"></td>
+                      <td><input type="button" value="W1" (click)="setballbyrun('W', 'out', '1')"></td>
+                    </tr>
+                    <tr>
+                      <td><input type="button" value="W2" (click)="setballbyrun('W2', 'out', '2')"></td>
+                      <td><input type="button" value="W3" (click)="setballbyrun('W3', 'out', '3')"></td>
+                      <td><input type="button" value="W" (click)="setballbyrun('W', 'out', '0')"></td>
+                    </tr>
+                    <tr *ngIf = "freehit == true">
+                      <td><input type="button" value="0" (click)="setballbyrun('0', 'freehit', '0')"></td>
+                      <td><input type="button" value="1" (click)="setballbyrun('1' , 'freehit', '1')"></td>
+                      <td><input type="button" value="2" (click)="setballbyrun('2', 'freehit', '2')"></td>
+                      <td><input type="button" value="3" (click)="setballbyrun('3','freehit', '3')"></td>
+                      <td><input type="button" value="4" (click)="setballbyrun('4', 'freehit', '4')"></td>
+                    </tr>
+                    <tr *ngIf = "freehit == true">
+                      <td><input type="button" value="5" (click)="setballbyrun('5', 'freehit', '5')"></td>
+                      <td><input type="button" value="6" (click)="setballbyrun('6', 'freehit', '6')"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div> -->
+              </div>
+              <div class="row"></div>
+            </div>
+            <div class="col-md-6">
+              <div class="col-md-6">
+                <input
+                  *ngIf="score.p1 == ''"
+                  type="text"
+                  placeholder="Player One"
+                  [(ngModel)]="p1"
+                  (keyup.enter)="playerOne(p1)"
+                  class="form-control form-group"
+                />
+
+                <input
+                  *ngIf="score.p2 == ''"
+                  type="text"
+                  placeholder="Player two"
+                  [(ngModel)]="p2"
+                  (keyup.enter)="playerTwo(p2)"
+                  class="form-control form-group"
+                />
+              </div>
+              <!-- runs ends -->
+            </div>
+            <div class="col-md-12">
+              <div class="show-run pt-4">
+                <ul>
+                  <li>
+                    <span
+                      *ngIf="score.pb && Math.sign(score.pb.split(',').length - 12) !== -1"
+                      [ngClass]="{
+                        six:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 12
+                          ] === '6',
+                        four:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 12
+                          ] === '4',
+                        wicket:
+                          score.pb
+                            .split(',')
+                            [score.pb.split(',').length - 12].indexOf('W') !=
+                            -1 &&
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 12
+                          ] !== 'Wd',
+                        wide:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 12
+                          ] === 'Wd',
+                        dot:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 12
+                          ] === '0'
+                      }"
+                      class="ball-runs m-l-5"
+                      >{{
+                        score.pb.split(",")[score.pb.split(",").length - 12]
+                      }}</span
+                    >
+                  </li>
+                  <li>
+                    <span
+                      *ngIf="score.pb && Math.sign(score.pb.split(',').length - 11) !== -1"
+                      [ngClass]="{
+                        six:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 11
+                          ] === '6',
+                        four:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 11
+                          ] === '4',
+                        wicket:
+                          score.pb
+                            .split(',')
+                            [score.pb.split(',').length - 11].indexOf('W') !=
+                            -1 &&
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 11
+                          ] !== 'Wd',
+                        wide:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 11
+                          ] === 'Wd',
+                        dot:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 11
+                          ] === '0'
+                      }"
+                      class="ball-runs m-l-5"
+                      >{{
+                        score.pb.split(",")[score.pb.split(",").length - 11]
+                      }}</span
+                    >
+                  </li>
+                  <li>
+                    <span
+                      *ngIf="
+                        score.pb &&
+                        Math.sign(score.pb.split(',').length - 10) !== -1
+                      "
+                      [ngClass]="{
+                        six:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 10
+                          ] === '6',
+                        four:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 10
+                          ] === '4',
+                        wicket:
+                          score.pb
+                            .split(',')
+                            [score.pb.split(',').length - 10].indexOf('W') !=
+                            -1 &&
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 10
+                          ] !== 'Wd',
+                        wide:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 10
+                          ] === 'Wd',
+                        dot:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 10
+                          ] === '0'
+                      }"
+                      class="ball-runs m-l-5"
+                      >{{
+                        score.pb.split(",")[score.pb.split(",").length - 10]
+                      }}</span
+                    >
+                  </li>
+                  <li>
+                    <span
+                      *ngIf="
+                        score.pb &&
+                        Math.sign(score.pb.split(',').length - 9) !== -1
+                      "
+                      [ngClass]="{
+                        six:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 9
+                          ] === '6',
+                        four:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 9
+                          ] === '4',
+                        wicket:
+                          score.pb
+                            .split(',')
+                            [score.pb.split(',').length - 9].indexOf('W') !=
+                            -1 &&
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 9
+                          ] !== 'Wd',
+                        wide:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 9
+                          ] === 'Wd',
+                        dot:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 9
+                          ] === '0'
+                      }"
+                      class="ball-runs m-l-5"
+                      >{{
+                        score.pb.split(",")[score.pb.split(",").length - 9]
+                      }}</span
+                    >
+                  </li>
+                  <li>
+                    <span
+                      *ngIf="
+                        score.pb &&
+                        Math.sign(score.pb.split(',').length - 8) !== -1
+                      "
+                      [ngClass]="{
+                        six:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 8
+                          ] === '6',
+                        four:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 8
+                          ] === '4',
+                        wicket:
+                          score.pb
+                            .split(',')
+                            [score.pb.split(',').length - 8].indexOf('W') !=
+                            -1 &&
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 8
+                          ] !== 'Wd',
+                        wide:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 8
+                          ] === 'Wd',
+                        dot:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 8
+                          ] === '0'
+                      }"
+                      class="ball-runs m-l-5"
+                      >{{
+                        score.pb.split(",")[score.pb.split(",").length - 8]
+                      }}</span
+                    >
+                  </li>
+                  <li>
+                    <span
+                      *ngIf="
+                        score.pb &&
+                        Math.sign(score.pb.split(',').length - 7) !== -1
+                      "
+                      [ngClass]="{
+                        six:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 7
+                          ] === '6',
+                        four:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 7
+                          ] === '4',
+                        wicket:
+                          score.pb
+                            .split(',')
+                            [score.pb.split(',').length - 7].indexOf('W') !=
+                            -1 &&
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 7
+                          ] !== 'Wd',
+                        wide:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 7
+                          ] === 'Wd',
+                        dot:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 7
+                          ] === '0'
+                      }"
+                      class="ball-runs m-l-5"
+                      >{{
+                        score.pb.split(",")[score.pb.split(",").length - 7]
+                      }}</span
+                    >
+                  </li>
+
+                  <li>
+                    <span
+                      *ngIf="
+                        score.pb &&
+                        Math.sign(score.pb.split(',').length - 6) !== -1
+                      "
+                      [ngClass]="{
+                        six:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 6
+                          ] === '6',
+                        four:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 6
+                          ] === '4',
+                        wicket:
+                          score.pb
+                            .split(',')
+                            [score.pb.split(',').length - 6].indexOf('W') !=
+                            -1 &&
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 6
+                          ] !== 'Wd',
+                        wide:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 6
+                          ] === 'Wd',
+                        dot:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 6
+                          ] === '0'
+                      }"
+                      class="ball-runs m-l-5"
+                      >{{
+                        score.pb.split(",")[score.pb.split(",").length - 6]
+                      }}</span
+                    >
+                  </li>
+                  <li>
+                    <span
+                      *ngIf="
+                        score.pb &&
+                        Math.sign(score.pb.split(',').length - 5) !== -1
+                      "
+                      [ngClass]="{
+                        six:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 5
+                          ] === '6',
+                        four:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 5
+                          ] === '4',
+                        wicket:
+                          score.pb
+                            .split(',')
+                            [score.pb.split(',').length - 5].indexOf('W') !=
+                            -1 &&
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 5
+                          ] !== 'Wd',
+                        wide:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 5
+                          ] === 'Wd',
+                        dot:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 5
+                          ] === '0'
+                      }"
+                      class="ball-runs m-l-5"
+                      >{{
+                        score.pb.split(",")[score.pb.split(",").length - 5]
+                      }}</span
+                    >
+                  </li>
+                  <li>
+                    <span
+                      *ngIf="
+                        score.pb &&
+                        Math.sign(score.pb.split(',').length - 4) !== -1
+                      "
+                      [ngClass]="{
+                        six:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 4
+                          ] === '6',
+                        four:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 4
+                          ] === '4',
+                        wicket:
+                          score.pb
+                            .split(',')
+                            [score.pb.split(',').length - 4].indexOf('W') !=
+                            -1 &&
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 4
+                          ] !== 'Wd',
+                        wide:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 4
+                          ] === 'Wd',
+                        dot:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 4
+                          ] === '0'
+                      }"
+                      class="ball-runs m-l-5"
+                      >{{
+                        score.pb.split(",")[score.pb.split(",").length - 4]
+                      }}</span
+                    >
+                  </li>
+                  <li>
+                    <span
+                      *ngIf="
+                        score.pb &&
+                        Math.sign(score.pb.split(',').length - 3) !== -1
+                      "
+                      [ngClass]="{
+                        six:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 3
+                          ] === '6',
+                        four:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 3
+                          ] === '4',
+                        wicket:
+                          score.pb
+                            .split(',')
+                            [score.pb.split(',').length - 3].indexOf('W') !=
+                            -1 &&
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 3
+                          ] !== 'Wd',
+                        wide:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 3
+                          ] === 'Wd',
+                        dot:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 3
+                          ] === '0'
+                      }"
+                      class="ball-runs m-l-5"
+                      >{{
+                        score.pb.split(",")[score.pb.split(",").length - 3]
+                      }}</span
+                    >
+                  </li>
+                  <li>
+                    <span
+                      *ngIf="
+                        score.pb &&
+                        Math.sign(score.pb.split(',').length - 2) !== -1
+                      "
+                      [ngClass]="{
+                        six:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 2
+                          ] === '6',
+                        four:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 2
+                          ] === '4',
+                        wicket:
+                          score.pb
+                            .split(',')
+                            [score.pb.split(',').length - 2].indexOf('W') !=
+                            -1 &&
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 2
+                          ] !== 'Wd',
+                        wide:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 2
+                          ] === 'Wd',
+                        dot:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 2
+                          ] === '0'
+                      }"
+                      class="ball-runs m-l-5"
+                      >{{
+                        score.pb.split(",")[score.pb.split(",").length - 2]
+                      }}</span
+                    >
+                  </li>
+                  <li>
+                    <span
+                      *ngIf="score.pb && Math.sign(score.pb.length - 1) !== -1"
+                      [ngClass]="{
+                        six:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 1
+                          ] === '6',
+                        four:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 1
+                          ] === '4',
+                        wicket:
+                          score.pb
+                            .split(',')
+                            [score.pb.split(',').length - 1].indexOf('W') !=
+                            -1 &&
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 1
+                          ] !== 'Wd',
+                        wide:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 1
+                          ] === 'Wd',
+                        dot:
+                          score.pb.split(',')[
+                            score.pb.split(',').length - 1
+                          ] === '0'
+                      }"
+                      class="ball-runs m-l-5"
+                      >{{
+                        score.pb.split(",")[score.pb.split(",").length - 1]
+                      }}</span
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6" style="min-height: 135px !important">
+            <table
+              class="table table-striped table-bordered"
+              style="width: 100%"
+            >
+              <thead class="navbar-bet99 text-white">
+                <tr>
+                  <th class="pt-0 pb-0">TEAM</th>
+                  <th class="pt-0 pb-0 text-center">SCORE</th>
+                  <th class="pt-0 pb-0 text-center">OVER</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td width="150" class="p-0 small pr-1 pl-1">
+                    <div
+                      style="font-size: small; font-weight: bold"
+                      class="mt-2"
+                    >
+                      {{ score.t1.f ? score.t1.f.trim() : '' }}
+                    </div>
+                  </td>
+                  <td align="center">{{ score.i1.sc }}/{{ score.i1.wk }}</td>
+                  <td align="center">{{ score.i1.ov }}</td>
+                </tr>
+                <tr>
+                  <td width="150" class="p-0 small pr-1 pl-1">
+                    <div
+                      style="font-size: small; font-weight: bold"
+                      class="mt-2"
+                    >
+                      {{ score.t2.f ? score.t2.f.trim() : '' }}
+                    </div>
+                  </td>
+                  <td align="center">{{ score.i2.sc }}/{{ score.i2.wk }}</td>
+                  <td align="center">{{ score.i2.ov }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-6">
+            <table
+              class="table table-striped table-bordered"
+              style="width: 100%"
+            >
+              <thead class="navbar-bet99 text-white">
+                <tr>
+                  <th class="pt-0 pb-0">BATSMAN</th>
+                  <th class="pt-0 pb-0 text-center">RUN</th>
+                  <th class="pt-0 pb-0 text-center">DESCRIPTION</th>
+                  <th class="pt-0 pb-0 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td align="left">
+                    {{ score.p1.substr(0, score.p1.indexOf(" ")).split("")[0] }}
+                    {{ score.p1.substr(score.p1.indexOf(" ") + 1) }} *
+                  </td>
+                  <td align="center">
+                    {{ score.b1s.length > 1 ? score.b1s.split(",")[0] : "" }}({{
+                      score.b1s.length > 1 ? score.b1s.split(",")[1] : ""
+                    }})
+                  </td>
+                  <td align="center">
+                    4*{{ score.b1s.length > 1 ? score.b1s.split(",")[2] : "" }},
+                    6*{{ score.b1s.length > 1 ? score.b1s.split(",")[3] : "" }}
+                  </td>
+                  <td>
+                    <button (click)="out('p1')" class="btn btn-success">
+                      Out
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="left">
+                    {{ score.p2.substr(0, score.p2.indexOf(" ")).split("")[0] }}
+                    {{ score.p2.substr(score.p2.indexOf(" ") + 1) }}
+                  </td>
+                  <td align="center">
+                    {{ score.b2s.length > 1 ? score.b2s.split(",")[0] : "" }}({{
+                      score.b2s.length > 1 ? score.b2s.split(",")[1] : ""
+                    }})
+                  </td>
+                  <td align="center">
+                    4*{{ score.b2s.length > 1 ? score.b2s.split(",")[2] : "" }},
+                    6*{{ score.b2s.length > 1 ? score.b2s.split(",")[3] : "" }}
+                  </td>
+                  <td>
+                    <button (click)="out('p2')" class="btn btn-success">
+                      Out
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row pt-4">
+            <div class="col-md-6">
+              <table
+                class="table table-striped table-bordered"
+                style="width: 100%"
+              >
+                <thead class="navbar-bet99 text-white">
+                  <tr>
+                    <th class="pt-0 pb-0">BOWLER</th>
+                    <!-- <th class="pt-0 pb-0 text-center">WICKET</th>
+                <th class="pt-0 pb-0 text-center">RUN</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td align="left">
+                      {{
+                        score.bw.substr(0, score.bw.indexOf(" ")).split("")[0]
+                      }}
+                      {{ score.bw.substr(score.bw.indexOf(" ") + 1) }}
+                    </td>
+                    <!-- <td align="center">5</td>
+                <td align="center">23</td> -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "bluexch-com"
+  },
+  "targets": {
+    "bluexch-com": {
+      "hosting": {
+        "bluexch.com": [
+          "bluexch-com"
+        ],
+        "admin.bluexch.com": [
+          "admin-bluexch"
+        ]
+      }
+    }
+  }
+}

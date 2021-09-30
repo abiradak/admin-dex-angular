@@ -1,0 +1,9 @@
+.lgoin{
+    width: 100%;
+    height: 100vh;
+    background-image: url(../../assets/images/login-bg-pattern.png);
+
+}
+.card-login {
+    margin-top: 20vh;
+}

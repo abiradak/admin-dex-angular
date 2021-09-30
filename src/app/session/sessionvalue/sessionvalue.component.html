@@ -1,0 +1,243 @@
+<div class="match-sesstion mt-4">
+  <div class="container">
+    <div class="row">
+      <div class="col col-md-12 col-sm-12 text-center">
+        <div class="btn btn-sm mr-1 mb-1 btn-success">{{ NoVolume }}</div>
+        <div class="btn btn-sm mr-1 mb-1 btn-success">{{ YesVolume }}</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6" style="min-height: 135px !important">
+        <table class="table table-striped table-bordered" style="width: 100%">
+          <thead class="navbar-bet99 text-white">
+            <tr>
+              <th class="pt-0 pb-0">SESSION</th>
+              <th class="pt-0 pb-0 text-center">NOT</th>
+              <th class="pt-0 pb-0 text-center">YES</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="response">
+            <tr>
+              <td width="150" class="p-0 small pr-1 pl-1">
+                <div
+                  class="p-0 m-0 small"
+                  style="position: absolute; line-height: 7px"
+                >
+                  <span class="m-0 small text-danger mr-3"
+                    >Min -
+                    {{
+                      response.session && response.session.session_bet_min
+                        ? response.session.session_bet_min
+                        : ""
+                    }}</span
+                  >
+                  <span class="m-0 small text-danger">
+                    Max -
+                    {{
+                      response.session && response.session.session_bet_max
+                        ? response.session.session_bet_max
+                        : ""
+                    }}</span
+                  >
+                </div>
+                <div style="font-size: small; font-weight: bold" class="mt-2">
+                  {{
+                    response.session && response.session.name
+                      ? response.session.name
+                      : ""
+                  }}
+                </div>
+              </td>
+              <td width="25" class="fav-team-lay text-center lay-bg">
+                <span class="suspn">{{
+                  response.session && response.session.SessInptNo
+                    ? response.session.SessInptNo == 0
+                      ? "SUSPENDED"
+                      : response.session.SessInptNo
+                    : "SUSPENDED"
+                }}</span>
+              </td>
+              <td width="25" class="fav-team-back text-center bk-bg">
+                <span class="suspn">{{
+                  response.session && response.session.SessInptYes
+                    ? response.session.SessInptYes == 0
+                      ? "SUSPENDED"
+                      : response.session.SessInptYes
+                    : "SUSPENDED"
+                }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card w-100">
+          <div class="card-header">
+            <div *ngIf="response" class="float-left p-0 m-0 mt-1">
+              <span class="h5">{{
+                response.session && response.session.name
+                  ? response.session.name
+                  : ""
+              }}</span>
+              <span class="h6"
+                >(
+                {{
+                  response.match && response.match.long_name
+                    ? response.match.long_name
+                    : ""
+                }}
+                )</span
+              >
+            </div>
+            <a
+              href="#"
+              id="create-market"
+              class="btn btn-info btn-sm float-right mr-2"
+            >
+              <i class="fa fa-plus"></i>
+              New Session</a
+            >
+          </div>
+
+          <div class="card-body position-relative">
+            <div class="row">
+              <div
+                *ngIf="!sesAuthenticate"
+                style="
+                  width: 100%;
+                  min-height: 130px;
+                  bottom: 0px;
+                  left: 0px;
+                  position: absolute;
+                  background: rgba(244, 67, 54, 0.91);
+                  z-index: 9999;
+                "
+                class="row p-0 m-0 interface-locked"
+              >
+                <div class="col">
+                  <h3 class="text-center text-white p-2">Interface locked</h3>
+                  <div class="text-center">
+                    <button (click)="control()" class="btn btn-warning">
+                      <i class="fa fa-check"></i>
+                      Send Control Request
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-7">
+                <div class="row p-1">
+                  <div class="col-md-4 col-sm-4 mt-2 text-white bg-dark">
+                    NOT
+                  </div>
+                  <div class="col-md-4 col-sm-4 mt-2 text-white bg-dark">
+                    YES
+                  </div>
+                  <div class="col-md-4 col-sm-4 mt-2 text-white bg-dark">
+                    DIFF
+                  </div>
+                </div>
+                <div class="row p-1 team-row" id="row-0">
+                  <div class="col-md-4 col-sm-4 mt-2">
+                    <input
+                      type="number"
+                      class="form-control team-lay"
+                      name="lay"
+                      [(ngModel)]="not"
+                      (keyup.enter)="insertData()"
+                    />
+                  </div>
+                  <div class="col-md-4 col-sm-4 mt-2">
+                    <input
+                      type="number"
+                      class="form-control team-back"
+                      name="back"
+                      [(ngModel)]="yes"
+                      (keyup.enter)="insertData()"
+                      [disabled]="disabled"
+                    />
+                  </div>
+                  <div class="col-md-4 col-sm-4 mt-2">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-number"
+                          (click)="
+                            diff = diff - 1;
+                            diff == 0 ? (disabled = false) : true;
+                            diff == 0 ? (minus_disabled = true) : false;
+                            insertData()
+                          "
+                          [disabled]="minus_disabled"
+                        >
+                          <span class="fa fa-minus"></span>
+                        </button>
+                      </span>
+                      <input
+                        type="text"
+                        class="
+                          form-control
+                          team-diff
+                          input-number
+                          p-1
+                          text-center
+                        "
+                        [(ngModel)]="diff"
+                        min="0"
+                        max="20"
+                      />
+                      <span class="input-group-btn">
+                        <button
+                          type="button"
+                          class="btn btn-success btn-number"
+                          (click)="
+                            diff = diff + 1;
+                            diff == 0 ? (disabled = false) : true;
+                            diff == 0 ? (minus_disabled = true) : false;
+                            insertData()
+                          "
+                        >
+                          <span class="fa fa-plus"></span>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="row p-1">
+                  <div class="col text-white bg-dark mt-2">-</div>
+                </div>
+                <div class="row p-1">
+                  <div
+                    class="col-md-12 col-sm-12 mt-2 p-0"
+                    data-id="12354"
+                    data-event-id="123324"
+                  >
+                    <button
+                      class="btn btn-{{ lck == 1 ? 'danger' : 'success' }} mr-1"
+                      (click)="
+                        lck == 0 ? (lck = 1) : (lck = 0);
+                        insertData()
+                      "
+                    >
+                      <i class="fa fa-unlock"></i>
+                      Lk
+                    </button>
+                    <!-- <button id="control-session" class="btn btn-info"><i class="fa-check fa"></i> Control</button> -->
+                    <button class="btn btn-warning" (click)="clearData()">
+                      Clear Data
+                      <i class="fa fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

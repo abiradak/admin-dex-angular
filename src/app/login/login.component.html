@@ -1,0 +1,90 @@
+<div class="lgoin">
+  <div class="container">
+    <div class="row">
+      <div
+        class="col-sm-8 col-md-6 col-lg-4 mx-auto align-middle"
+        style="z-index: 10"
+      >
+        <div class="card card-login" style="background: none; border: 0">
+          <div class="card-title text-center">
+            <div class="card-title text-center p-0">
+              <img style="width: 45%" src="../../assets/images/logo.png" />
+            </div>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="login">
+              <div class="row">
+                <div class="col">
+                  <!-- <label for="username">User Name</label> -->
+                  <input
+                    id="username"
+                    type="text"
+                    class="form-control"
+                    placeholder="Your Username"
+                    formControlName="username"
+                    [ngClass]="{
+                      'is-invalid':
+                        login.controls?.username?.invalid &&
+                        login.controls?.username?.touched
+                    }"
+                  />
+                  <div
+                    *ngIf="login.controls?.username?.errors?.required"
+                    class="invalid-feedback"
+                  >
+                    Username is required.
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col">
+                  <!-- <label for="password">Password</label> -->
+                  <input
+                    type="password"
+                    class="form-control"
+                    placeholder="Your Password"
+                    formControlName="password"
+                    [ngClass]="{
+                      'is-invalid':
+                        login.controls?.password?.invalid &&
+                        login.controls?.password?.touched
+                    }"
+                  />
+                  <div
+                    *ngIf="login.controls?.password?.errors?.required"
+                    class="invalid-feedback"
+                  >
+                    Password is required.
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col">
+                  <!-- <div>
+                    <div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;">
+                    <div class="grecaptcha-logo">
+                        <iframe title="reCAPTCHA" src="https://www.google.com/recaptcha/api2/anchor?ar=1&amp;k=6LfULdcZAAAAAJOONMSszPNHU6d_EP2XmwHg4aSU&amp;co=aHR0cHM6Ly9hZG1pbi5iZXQ5OS5pbzo0NDM.&amp;hl=en&amp;v=mrdLhN7MywkJAAbzddTIjTaM&amp;size=invisible&amp;cb=h3mii3q1xvkz" width="256" height="60" role="presentation" name="a-p7c6csmu5pl9" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox">
+                        </iframe>
+                    </div>
+                    <div class="grecaptcha-error">
+
+                    </div>
+                    <textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea></div><iframe style="display: none;"></iframe>
+                  </div> -->
+                  <button
+                    id="login"
+                    class="btn cstm-btn-bk g-recaptcha"
+                    style="width: 100%"
+                    (click) = "submit()"
+                  >
+                    Login ( Admin )
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

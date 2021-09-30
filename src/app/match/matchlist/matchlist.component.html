@@ -1,0 +1,1231 @@
+<div class="body-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tab-button text-center mt-3">
+          <button class="btn btn-sm btn-primary mx-1">
+            <i class="fa fa-filter"></i> Football
+          </button>
+          <button class="btn btn-sm btn-info mx-1">
+            <i class="fa fa-filter"></i> Tennis
+          </button>
+          <button class="btn btn-sm btn-success mx-1">
+            <i class="fa fa-filter"></i> Cricket
+          </button>
+        </div>
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <h3>Matches</h3>
+            <button (click)="showMatchForm()" class="btn btn-info btn-sm">
+              <i class="fa fa-plus"></i> Add Match
+            </button>
+          </div>
+          <div class="card-body p-0 p-sm-3">
+            <!-- add match form section -->
+            <div *ngIf="showForm == true" id="form-wrapper">
+              <div id="form-add-match-wrapper">
+                <form [formGroup]="addmatch">
+                  <div class="border-bottom p-3">
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <label> Sports </label>
+                        <select
+                          #mySelect
+                          class="form-control"
+                          formControlName="event_type_id"
+                          (change)="getCompetetionList(mySelect.value)"
+                          [ngClass]="{
+                            'is-invalid':
+                              addmatch.controls?.event_type_id?.invalid &&
+                              addmatch.controls?.event_type_id?.touched
+                          }"
+                        >
+                          <option selected="true" value="">
+                            - Select Sport -
+                          </option>
+                          <option value="4">Cricket</option>
+                          <option value="1">Football</option>
+                          <option value="3">Tennis</option>
+                          <option value="0">Kabaddi</option>
+                        </select>
+                        <div
+                          *ngIf="
+                            addmatch.controls?.event_type_id?.errors?.required
+                          "
+                          class="invalid-feedback"
+                        >
+                          Sport is required.
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <label> Competitions </label>
+                        <select
+                          class="form-control"
+                          formControlName="competition_id"
+                          [ngClass]="{
+                            'is-invalid':
+                              addmatch.controls?.competition_id?.invalid &&
+                              addmatch.controls?.competition_id?.touched
+                          }"
+                        >
+                          <option value="" selected="true">
+                            - Select Competition -
+                          </option>
+                          <option
+                            *ngFor="let comp of competetionList"
+                            value="{{ comp.competition_id }}"
+                          >
+                            {{ comp.long_name }}
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="
+                            addmatch.controls?.competition_id?.errors?.required
+                          "
+                          class="invalid-feedback"
+                        >
+                          Competition is required.
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+                        <label> Matches </label>
+                        <select
+                          class="form-control"
+                          id="match-dropdown"
+                          formControlName="match_id"
+                        ></select>
+                      </div>
+                      <div class="col-md-6 col-sm-12 mt-2">
+                        <label class="small w-100"
+                          >Event ID ( Betfair )
+                          <button
+                            class="btn btn-sm btn-warning float-right p-0 px-1"
+                            (click)="suggest()"
+                          >
+                            Suggest
+                          </button>
+                        </label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="event_id"
+                          [ngClass]="{
+                            'is-invalid':
+                              addmatch.controls?.event_id?.invalid &&
+                              addmatch.controls?.event_id?.touched
+                          }"
+                        />
+                        <div
+                          *ngIf="addmatch.controls?.event_id?.errors?.required"
+                          class="invalid-feedback"
+                        >
+                          event_id is required.
+                        </div>
+                        <div
+                          *ngIf="addmatch.controls?.event_id?.errors?.maxlength"
+                          class="invalid-feedback"
+                        >
+                          event_id can maximum 20 Characters.
+                        </div>
+                        <div
+                          *ngIf="addmatch.controls?.event_id?.errors?.minlength"
+                          class="invalid-feedback"
+                        >
+                          event_id will atleast 4 Characters.
+                        </div>
+                        <div
+                          *ngIf="addmatch.controls?.event_id?.errors?.pattern"
+                          class="invalid-feedback"
+                        >
+                          event_id Will include only Numbers.
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-sm-12 mt-2">
+                        <label class="small w-100"
+                          >Market ID ( Betfair )
+                          <button
+                            class="btn btn-sm btn-warning float-right p-0 px-1"
+                            (click)="autofill()"
+                          >
+                            Autofill
+                          </button>
+                        </label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="market_id"
+                          [ngClass]="{
+                            'is-invalid':
+                              addmatch.controls?.market_id?.invalid &&
+                              addmatch.controls?.market_id?.touched
+                          }"
+                        />
+                        <div
+                          *ngIf="addmatch.controls?.market_id?.errors?.required"
+                          class="invalid-feedback"
+                        >
+                          market_id is required.
+                        </div>
+                        <div
+                          *ngIf="
+                            addmatch.controls?.market_id?.errors?.maxlength
+                          "
+                          class="invalid-feedback"
+                        >
+                          market_id can maximum 25 Characters.
+                        </div>
+                        <div
+                          *ngIf="
+                            addmatch.controls?.market_id?.errors?.minlength
+                          "
+                          class="invalid-feedback"
+                        >
+                          market_id will atleast 4 Characters.
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-sm-12 mt-2">
+                        <label class="small">Score ID </label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="cricbuzz_id"
+                          [ngClass]="{
+                            'is-invalid':
+                              addmatch.controls?.cricbuzz_id?.invalid &&
+                              addmatch.controls?.cricbuzz_id?.touched
+                          }"
+                        />
+                        <div
+                          *ngIf="
+                            addmatch.controls?.cricbuzz_id?.errors?.required
+                          "
+                          class="invalid-feedback"
+                        >
+                          cricbuzz_id is required.
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-sm-12 mt-2">
+                        <label>Full Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="long_name"
+                          [ngClass]="{
+                            'is-invalid':
+                              addmatch.controls?.long_name?.invalid &&
+                              addmatch.controls?.long_name?.touched
+                          }"
+                          (focusout)="autofillShortName($event)"
+                        />
+                        <div
+                          *ngIf="addmatch.controls?.long_name?.errors?.required"
+                          class="invalid-feedback"
+                        >
+                          long_name is required.
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-sm-12 mt-2">
+                        <label>Short Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="short_name"
+                          [ngClass]="{
+                            'is-invalid':
+                              addmatch.controls?.short_name?.invalid &&
+                              addmatch.controls?.short_name?.touched
+                          }"
+                          (focusout)="autofillTeams($event)"
+                        />
+                        <div
+                          *ngIf="
+                            addmatch.controls?.short_name?.errors?.required
+                          "
+                          class="invalid-feedback"
+                        >
+                          short_name is required.
+                        </div>
+                        <div
+                          *ngIf="
+                            addmatch.controls?.short_name?.errors?.maxlength
+                          "
+                          class="invalid-feedback"
+                        >
+                          short_name can maximum 10 Characters.
+                        </div>
+                        <div
+                          *ngIf="
+                            addmatch.controls?.short_name?.errors?.minlength
+                          "
+                          class="invalid-feedback"
+                        >
+                          short_name will atleast 4 Characters.
+                        </div>
+                        <div
+                          *ngIf="addmatch.controls?.short_name?.errors?.pattern"
+                          class="invalid-feedback"
+                        >
+                          short_name Will include only Characters.
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="row">
+                          <div
+                            class="col-md-6 col-sm-12 mt-2"
+                            formArrayName="teams"
+                            *ngFor="
+                              let teams of addmatch.controls.teams?.value;
+                              let i = index;
+                              trackBy: cmpare
+                            "
+                          >
+                            <ng-container [formGroupName]="i">
+                              <label
+                                >Team
+                                {{ i == 0 ? "A" : i == 1 ? "B" : i }}</label
+                              >
+                              <input
+                                type="text"
+                                class="form-control team-b"
+                                formControlName="team"
+                                [ngClass]="{
+                                  'is-invalid':
+                                    addmatch.controls?.teams?.invalid &&
+                                    addmatch.controls?.teams?.touched
+                                }"
+                              />
+                            </ng-container>
+
+                            <!-- <input type="hidden" name="selection_id" />
+                            <input type="hidden" name="selection_name" /> -->
+                          </div>
+                          <a
+                            class="btn btn-warning btn-sm float-right mr-1"
+                            id="add-team"
+                            (click)="addTeams()"
+                            style="position: absolute; top: 0px; right: 15px"
+                          >
+                            <i class="fa fa-plus"></i>
+                            More Team</a
+                          >
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-sm-12 mt-2">
+                        <label class="d-block">Start Time</label>
+                        <!-- <input
+                          type="datetime-local"
+                          class="form-control w-75 d-inline-block start_time"
+                          formControlName="start_time"
+                          id="meeting-time"
+                          [ngClass]="{
+                            'is-invalid':
+                              addmatch.controls?.start_time?.invalid &&
+                              addmatch.controls?.start_time?.touched
+                          }"
+                        /> -->
+                        <app-datetimepicker
+                          formControlName="start_time"
+                          name="activeEndDate"
+                          [ngClass]="{
+                            'is-invalid':
+                              addmatch.controls?.start_time?.invalid &&
+                              addmatch.controls?.start_time?.touched
+                          }"
+                        ></app-datetimepicker>
+                        <div
+                          *ngIf="
+                            addmatch.controls?.start_time?.errors?.required
+                          "
+                          class="invalid-feedback"
+                        >
+                          start_time is required.
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-12 mt-2">
+                        <label>Bet Min</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="bet_min"
+                          [ngClass]="{
+                            'is-invalid':
+                              addmatch.controls?.bet_min?.invalid &&
+                              addmatch.controls?.bet_min?.touched
+                          }"
+                        />
+                        <div
+                          *ngIf="addmatch.controls?.bet_min?.errors?.required"
+                          class="invalid-feedback"
+                        >
+                          bet_min is required.
+                        </div>
+                        <div
+                          *ngIf="addmatch.controls?.bet_min?.errors?.max"
+                          class="invalid-feedback"
+                        >
+                          bet_min can maximum 100000
+                        </div>
+                        <div
+                          *ngIf="addmatch.controls?.bet_min?.errors?.min"
+                          class="invalid-feedback"
+                        >
+                          bet_min can minimum 500
+                        </div>
+                        <div
+                          *ngIf="addmatch.controls?.bet_min?.errors?.pattern"
+                          class="invalid-feedback"
+                        >
+                          bet_min Will include only Numbers.
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-12 mt-2">
+                        <label>Bet Max</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="bet_max"
+                          [ngClass]="{
+                            'is-invalid':
+                              addmatch.controls?.bet_max?.invalid &&
+                              addmatch.controls?.bet_max?.touched
+                          }"
+                        />
+                        <div
+                          *ngIf="addmatch.controls?.bet_max?.errors?.required"
+                          class="invalid-feedback"
+                        >
+                          bet_max is required.
+                        </div>
+                        <div
+                          *ngIf="addmatch.controls?.bet_max?.errors?.max"
+                          class="invalid-feedback"
+                        >
+                          bet_max can maximum 1000000.
+                        </div>
+                        <div
+                          *ngIf="addmatch.controls?.bet_max?.errors?.min"
+                          class="invalid-feedback"
+                        >
+                          bet_max minimum 500
+                        </div>
+                        <div
+                          *ngIf="addmatch.controls?.bet_max?.errors?.pattern"
+                          class="invalid-feedback"
+                        >
+                          bet_max Will include only Numbers.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-4 mb-4">
+                    <div class="col text-right">
+                      <button
+                        id="cancel-it"
+                        (click)="hideForm()"
+                        class="btn btn-danger btn-sm mr-1"
+                      >
+                        <i class="fa fa-window-close"></i>
+                        Cancel
+                      </button>
+                      <button
+                        (click)="submit()"
+                        id="save-it"
+                        class="btn btn-success btn-sm mr-3"
+                      >
+                        <i class="fa fa-save"></i>
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- add match form section -->
+
+            <!-- edit match -->
+            <div *ngIf="showEditForm == true" id="form-wrapper">
+              <form [formGroup]="editmatch">
+                <div class="border-bottom p-3">
+                  <div class="row">
+                    <div class="col-md-6 col-sm-12 mt-2">
+                      <label>Score ID </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="cricbuzz_id"
+                        [ngClass]="{
+                          'is-invalid':
+                            editmatch.controls?.cricbuzz_id?.invalid &&
+                            editmatch.controls?.cricbuzz_id?.touched
+                        }"
+                      />
+                      <div
+                        *ngIf="
+                          editmatch.controls?.cricbuzz_id?.errors?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        cricbuzz_id is required.
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 mt-2">
+                      <label>Full Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="long_name"
+                        [ngClass]="{
+                          'is-invalid':
+                            editmatch.controls?.long_name?.invalid &&
+                            editmatch.controls?.long_name?.touched
+                        }"
+                      />
+                      <div
+                        *ngIf="editmatch.controls?.long_name?.errors?.required"
+                        class="invalid-feedback"
+                      >
+                        long_name is required.
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 mt-2">
+                      <label>Bet Min</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="bet_min"
+                        [ngClass]="{
+                          'is-invalid':
+                            editmatch.controls?.bet_min?.invalid &&
+                            editmatch.controls?.bet_min?.touched
+                        }"
+                      />
+                      <div
+                        *ngIf="editmatch.controls?.bet_min?.errors?.required"
+                        class="invalid-feedback"
+                      >
+                        bet_min is required.
+                      </div>
+                      <div
+                        *ngIf="editmatch.controls?.bet_min?.errors?.max"
+                        class="invalid-feedback"
+                      >
+                        bet_min can maximum 100000
+                      </div>
+                      <div
+                        *ngIf="editmatch.controls?.bet_min?.errors?.min"
+                        class="invalid-feedback"
+                      >
+                        bet_min can minimum 500
+                      </div>
+                      <div
+                        *ngIf="editmatch.controls?.bet_min?.errors?.pattern"
+                        class="invalid-feedback"
+                      >
+                        bet_min Will include only Numbers.
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 mt-2">
+                      <label>Bet Max</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="bet_max"
+                        [ngClass]="{
+                          'is-invalid':
+                            editmatch.controls?.bet_max?.invalid &&
+                            editmatch.controls?.bet_max?.touched
+                        }"
+                      />
+                      <div
+                        *ngIf="editmatch.controls?.bet_max?.errors?.required"
+                        class="invalid-feedback"
+                      >
+                        bet_max is required.
+                      </div>
+                      <div
+                        *ngIf="editmatch.controls?.bet_max?.errors?.max"
+                        class="invalid-feedback"
+                      >
+                        bet_max can maximum 1000000.
+                      </div>
+                      <div
+                        *ngIf="editmatch.controls?.bet_max?.errors?.min"
+                        class="invalid-feedback"
+                      >
+                        bet_max minimum 500
+                      </div>
+                      <div
+                        *ngIf="editmatch.controls?.bet_max?.errors?.pattern"
+                        class="invalid-feedback"
+                      >
+                        bet_max Will include only Numbers.
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 mt-2">
+                      <label>Live Tv CH </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="zoom"
+                        [ngClass]="{
+                          'is-invalid':
+                            editmatch.controls?.zoom?.invalid &&
+                            editmatch.controls?.zoom?.touched
+                        }"
+                      />
+                      <div
+                        *ngIf="editmatch.controls?.zoom?.errors?.required"
+                        class="invalid-feedback"
+                      >
+                        start_time is required.
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 mt-2">
+                      <label>Start Time</label>
+                      <!-- <input
+                        type="datetime-local"
+                        class="form-control start_time"
+                        formControlName="start_time"
+                        [ngClass]="{
+                          'is-invalid':
+                            editmatch.controls?.start_time?.invalid &&
+                            editmatch.controls?.start_time?.touched
+                        }"
+                      /> -->
+                      <app-datetimepicker
+                        formControlName="start_time"
+                        name="activeEndDate"
+                        [ngClass]="{
+                          'is-invalid':
+                            addmatch.controls?.start_time?.invalid &&
+                            addmatch.controls?.start_time?.touched
+                        }"
+                      ></app-datetimepicker>
+                      <div
+                        *ngIf="editmatch.controls?.start_time?.errors?.required"
+                        class="invalid-feedback"
+                      >
+                        start_time is required.
+                      </div>
+                    </div>
+                    <input
+                      type="hidden"
+                      class="form-control"
+                      formControlName="event_id"
+                    />
+                  </div>
+                </div>
+                <div class="row mt-4 mb-4">
+                  <div class="col text-right">
+                    <button
+                      (click)="hideEditForm()"
+                      id="cancel-it"
+                      class="btn btn-danger mx-1 btn-sm"
+                    >
+                      <i class="fa fa-window-close"></i>
+                      Cancel
+                    </button>
+                    <button
+                      (click)="updateMatch()"
+                      id="save-it"
+                      class="btn btn-success mx-1 btn-sm mr-3"
+                    >
+                      <i class="fa fa-save"></i>
+                      Update
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- edit match -->
+
+            <!-- matches -->
+            <div class="row">
+              <div class="col-md-6" *ngFor="let match of matches">
+                <div class="card">
+                  <div class="card-header p-0">
+                    <a
+                      target="_blank"
+                      [routerLink]="['/session/' + match.event_id]"
+                    >
+                      <h4
+                        class="text-center p-2 m-0 m-2 small font-weight-bold"
+                        [ngClass]="{
+                          'bg-dark text-white':
+                            match.inactive == 1 && match.completed == 0,
+                          'bg-warning text-dark':
+                            match.inactive == 0 && match.completed == 0,
+                          'bg-success text-white': match.completed == 1
+                        }"
+                      >
+                        {{ match.long_name }}
+                      </h4>
+                    </a>
+                    <div
+                      *ngIf="!match.cricbuzz_id"
+                      style="
+                        position: absolute;
+                        top: -5px;
+                        right: 35px;
+                        z-index: 10;
+                      "
+                      class="alert alert-danger p-0 small pr-2 pl-2"
+                    >
+                      score id not available
+                    </div>
+
+                    <a
+                     *ngIf="match.manual == 1"
+                      target="_blank"
+                      [routerLink]="['/score/' + match.cricbuzz_id]"
+                    >
+                      <button
+                        style="
+                          position: absolute;
+                          top: -10px;
+                          right: 40px;
+                          border: 1px solid white;
+                          z-index: 10;
+                        "
+                        class="mt-2 btn btn-warning btn-sm vrx-edit-match"
+                      >
+                        <i class="fa fa-bars"></i>
+                      </button>
+                    </a>
+
+                    <button
+                      (click)="showEditMatchForm(match)"
+                      style="
+                        position: absolute;
+                        top: -10px;
+                        right: 0px;
+                        border: 1px solid white;
+                        z-index: 10;
+                      "
+                      [disabled]="match.completed"
+                      class="mt-2 btn btn-warning btn-sm vrx-edit-match"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    <button
+                      style="
+                        position: absolute;
+                        top: -10px;
+                        left: 0px;
+                        border: 1px solid white;
+                      "
+                      [disabled]="match.completed"
+                      class="mt-2 btn btn-{{
+                        match.manual == 0 ? 'success' : 'danger'
+                      }} vrx-manual btn-sm"
+                      (click)="matchMode(match, match.manual == 1 ? '0' : '1')"
+                    >
+                      <i class="fa fa-key" aria-hidden="true"></i>
+                    </button>
+                    <a
+                      *ngIf="match.manual == 1"
+                      target="_blank"
+                      [routerLink]="[
+                        '/match-value/' + match.event_id + '/' + match.market_id
+                      ]"
+                    >
+                      <button
+                        style="
+                          position: absolute;
+                          top: 22px;
+                          left: 0px;
+                          border: 1px solid white;
+                        "
+                        class="mt-2 btn btn-success vrx-manual btn-sm"
+                      >
+                        <i class="fa fa-keyboard-o"></i>
+                      </button>
+                    </a>
+                    <h6 class="text-muted small text-center">
+                      ({{ match.competition_name }})
+                    </h6>
+                    <span
+                      class="bg-success text-white p-1"
+                      style="
+                        position: absolute;
+                        top: 39px;
+                        right: 0px;
+                        transform: rotate(90deg);
+                        font-size: 8px;
+                        opacity: 0.8;
+                      "
+                      >{{ match.sport_name }}</span
+                    >
+                  </div>
+                  <div class="card-body p-1">
+                    <div class="row pb-1">
+                      <div class="col-4 pl-3 pr-0">
+                        <div class="input-group input-group-sm">
+                          <span class="input-group-prepend vrx-delay-input-1">
+                            <span
+                              class="input-group-text text-muted small"
+                              style="font-size: xx-small"
+                              >delay</span
+                            >
+                          </span>
+                          <input
+                            type="text"
+                            class="form-control text-center vrx-delay-input"
+                            aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm"
+                            [(ngModel)]="match.delay"
+                            maxlength="1"
+                            minlength="1"
+                            min="0"
+                            max="6"
+                            [disabled]="match.completed"
+                          />
+                          <span class="input-group-append">
+                            <button
+                              (click)="delay(match.event_id, match.delay)"
+                              class="
+                                btn
+                                cstm-btn-bk
+                                btn-sm
+                                disabled
+                                vrx-delay-save
+                              "
+                              [disabled]="match.completed"
+                              type="button"
+                            >
+                              <i class="fa fa-save"></i>
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="col-4 px-2">
+                        <div class="input-group input-group-sm">
+                          <span
+                            class="
+                              input-group-prepend
+                              vrx-difference-back-input-1
+                            "
+                          >
+                            <span
+                              class="input-group-text text-muted small p-1"
+                              style="font-size: xx-small"
+                              >back</span
+                            >
+                          </span>
+                          <input
+                            type="number"
+                            class="
+                              p-0
+                              form-control
+                              text-center
+                              vrx-difference-back-input
+                            "
+                            aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm"
+                            [(ngModel)]="match.difference_back"
+                            maxlength="2"
+                            minlength="1"
+                            min="-9"
+                            max="9"
+                            [disabled]="match.completed"
+                          />
+                          <span class="input-group-append">
+                            <button
+                              class="
+                                btn
+                                cstm-btn-bk
+                                btn-sm
+                                disabled
+                                vrx-difference-back-save
+                              "
+                              (click)="
+                                differenceBack(
+                                  match.event_id,
+                                  match.difference_back
+                                )
+                              "
+                              type="button"
+                              [disabled]="match.completed"
+                            >
+                              <i class="fa fa-save"></i>
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="col-4 pr-3 pl-0">
+                        <div class="input-group input-group-sm">
+                          <span
+                            class="
+                              input-group-prepend
+                              vrx-difference-lay-input-1
+                            "
+                          >
+                            <span
+                              class="input-group-text text-muted small p-1"
+                              style="font-size: xx-small"
+                              >lay</span
+                            >
+                          </span>
+                          <input
+                            type="number"
+                            class="
+                              p-0
+                              form-control
+                              text-center
+                              vrx-difference-lay-input
+                            "
+                            aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm"
+                            [(ngModel)]="match.difference_lay"
+                            maxlength="2"
+                            minlength="1"
+                            min="-9"
+                            max="9"
+                            [disabled]="match.completed"
+                          />
+                          <span class="input-group-append">
+                            <button
+                              class="
+                                btn
+                                cstm-btn-bk
+                                btn-sm
+                                disabled
+                                vrx-difference-lay-save
+                              "
+                              data-event-id="30429496"
+                              type="button"
+                              (click)="
+                                differenceLay(
+                                  match.event_id,
+                                  match.difference_lay
+                                )
+                              "
+                              [disabled]="match.completed"
+                            >
+                              <i class="fa fa-save"></i>
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <h6 class="text-center">April 16, 2021, 6:00 pm</h6> -->
+                    <h6 class="text-center">
+                      {{ match.start_time | date: "MMMM d, y, h:mm a":"+0000" }}
+                    </h6>
+                    <div class="text-center small">
+                      <i
+                        [ngClass]="{
+                          'fa fa-circle text-success Blink': match.in_play == 1,
+                          'fa fa-ban': match.in_play == 0
+                        }"
+                      ></i>
+                      &nbsp;
+                      {{ match.in_play == 1 ? "IN PLAY" : "NOT IN PLAY" }}
+                    </div>
+                    <div
+                      class="text-center font-weight-bold"
+                      id="event-30429496"
+                    >
+                      <span class="small pb-1">
+                        <i class="fa fa-check-circle text-success"></i>
+                        {{ match.teams }}</span
+                      >
+                    </div>
+                    <div
+                      *ngIf="match.api == '1'"
+                      class="text-center small font-weight-bold"
+                      id="event-30416016"
+                    >
+                      <i class="fa fa-check-circle text-success"></i>
+                      <span>&nbsp; API STATUS</span>
+                    </div>
+                    <div class="text-center">
+                      <a href="#" class="btn btn-info btn-sm mr-1">
+                        <i class="fa fa-book"></i> Bets</a
+                      >
+                      <a href="#" class="btn btn-info btn-sm mr-1">
+                        <i class="fa fa-line-chart"></i> Live Bets</a
+                      >
+                      <a href="#" class="btn btn-info btn-sm mr-1">
+                        <i class="fa fa-database"></i> Report</a
+                      >
+                    </div>
+                  </div>
+                  <div class="card-footer text-center">
+                    <button
+                      (click)="
+                        matchStatus(
+                          match,
+                          match.inactive == 1 ? 0 : 1,
+                          match.in_play == 1 ? 0 : 1
+                        )
+                      "
+                      [disabled]="match.completed"
+                      class="btn mr-1 mb-1 btn-sm"
+                      [ngClass]="{
+                        'bg-dark text-white': match.inactive == 1,
+                        'bg-warning text-dark': match.inactive == 0
+                      }"
+                    >
+                      <i class="fa fa-thumbs-down"></i>
+                      {{ match.inactive == 1 ? "Active" : "Inactive" }}
+                    </button>
+                    <button
+                      [disabled]="!match.inactive"
+                      *ngIf="match.start_time > currentdatetime"
+                      (click)="delete(match.event_id, '1')"
+                      class="btn mr-1 mb-1 btn-danger btn-sm"
+                    >
+                      <i class="fa fa-trash"></i>
+                    </button>
+                    <button
+                      *ngIf="
+                        match.start_time < currentdatetime &&
+                        match.completed == 0
+                      "
+                      class="btn mr-1 mb-1 btn-success btn-sm"
+                      (click)="complete(match)"
+                    >
+                      <i class="fa fa-check"></i>
+                    </button>
+                    <button
+                      *ngIf="
+                        match.start_time < currentdatetime &&
+                        match.completed == 1
+                      "
+                      class="btn mr-1 mb-1 btn-success btn-sm"
+                      (click)="dec(match)"
+                    >
+                      <i class="fa fa-book"></i>Declare
+                    </button>
+                    <button
+                      class="btn mr-1 btn-{{
+                        match.locked == 1 && match.s_locked == 1
+                          ? 'danger'
+                          : 'success'
+                      }} btn-sm"
+                      (click)="
+                        allLock(
+                          match.event_id,
+                          match.locked == 1 ? '0' : '1',
+                          match.s_locked
+                            ? match.s_locked == 1
+                              ? '0'
+                              : '1'
+                            : '1'
+                        )
+                      "
+                      [disabled]="match.completed"
+                    >
+                      <i
+                        class="fa fa-{{
+                          match.s_locked &&
+                          match.s_locked == 1 &&
+                          match.locked == 1
+                            ? 'lock'
+                            : 'unlock-alt'
+                        }}"
+                      ></i>
+                      All LK
+                    </button>
+                    <button
+                      (click)="
+                        matchLock(match.event_id, match.locked == 1 ? '0' : '1')
+                      "
+                      class="btn mr-1 mb-1 btn-{{
+                        match.locked == 0 ? 'success' : 'danger'
+                      }} btn-sm"
+                      [disabled]="match.completed"
+                    >
+                      <i
+                        class="fa fa-{{
+                          match.locked == 0 ? 'unlock-alt' : 'lock'
+                        }}"
+                      ></i>
+                      M LK
+                    </button>
+                    <button
+                      (click)="
+                        sessionLockAll(
+                          match.event_id,
+                          match.s_locked
+                            ? match.s_locked == 1
+                              ? '0'
+                              : '1'
+                            : '1'
+                        )
+                      "
+                      [disabled]="match.completed"
+                      class="btn mr-1 mb-1 btn-{{
+                        match.s_locked && match.s_locked == 1
+                          ? 'danger'
+                          : 'success'
+                      }} btn-sm"
+                    >
+                      <i
+                        class="fa fa-{{
+                          match.s_locked && match.s_locked == 1
+                            ? 'lock'
+                            : 'unlock-alt'
+                        }}"
+                      ></i>
+                      S Lked
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6"></div>
+            </div>
+            <!-- matches -->
+          </div>
+        </div>
+
+        <!-- declare matches -->
+        <div class="card mt-3">
+          <div class="card-header">
+            <h4>Declare Matches</h4>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4" *ngFor="let match of declaredMatches">
+                <div class="card">
+                  <div class="card-header p-0 small">
+                    <a [routerLink]="['/session/' + match.event_id]">
+                      <h4
+                        class="
+                          text-center
+                          p-2
+                          m-0 m-2
+                          small
+                          bg-success
+                          text-white
+                        "
+                      >
+                        {{
+                          match.long_name.length <= 30
+                            ? match.long_name
+                            : match.long_name.substring(0, 30) + ".."
+                        }}
+                      </h4>
+                      <h6 class="text-muted small text-center">
+                        ({{ match.competition_name }})
+                      </h6>
+                      <h6 class="text-center small text-dark">
+                        ( {{ match.start_time | date: "MMMM d, y" }} )
+                      </h6>
+                    </a>
+                    <span
+                      class="bg-success text-white p-1"
+                      style="
+                        position: absolute;
+                        top: 45px;
+                        right: 0px;
+                        transform: rotate(90deg);
+                        font-size: 9px;
+                        opacity: 0.8;
+                      "
+                      >{{ match.sport_name.substring(0, 8) }}</span
+                    >
+                  </div>
+                  <div class="card-body p-2 text-center">
+                    <h6 class="small btn btn-success btn-sm">
+                      <i class="fa fa-check-circle text-white"></i>
+                      &nbsp;{{
+                        match.winner == "match_canc"
+                          ? "Match Cancel"
+                          : "Winner (" + match.winner + ")"
+                      }}
+                    </h6>
+
+                    <h6 class="text-center small text-dark">
+                      ( {{ match.start_time | date: "MMMM d, y, h:mm a" }} )
+                    </h6>
+                    <h6 class="text-muted small text-center">
+                      ( {{ match.updated | date: "MMMM d, y, h:mm a" }} )
+                    </h6>
+                  </div>
+                  <div class="card-footer text-center">
+                    <button class="btn mr-1 btn-danger btn-sm">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                    <a href="#" class="btn btn-info btn-sm mr-1">
+                      <i class="fa fa-book"></i> Bets</a
+                    >
+                    <a href="#" class="btn btn-info btn-sm mr-1">
+                      <i class="fa fa-line-chart"></i
+                    ></a>
+                    <a href="#" class="btn btn-info btn-sm mr-1">
+                      <i class="fa fa-database"></i> Report</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- declare matches -->
+
+        <button
+          type="button"
+          hidden="true"
+          class="btn btn-primary"
+          id="winnerselect"
+          data-toggle="modal"
+          data-target="#winner"
+        ></button>
+
+        <!-- The Modal -->
+        <div class="modal" id="winner">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Choose Winner</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                  &times;
+                </button>
+              </div>
+
+              <!-- Modal body -->
+              <div class="modal-body">
+                <select
+                  (change)="selectWinner($event.target.value)"
+                  class="form-control col-md-6 m-auto"
+                >
+                  <option value="" selected>Chose Winner</option>
+                  <option
+                    *ngFor="let teams of currentmatch"
+                    value="{{ teams }}"
+                  >
+                    {{ teams }}
+                  </option>
+                  <option value="cancel">Cancel</option>
+                </select>
+              </div>
+
+              <!-- Modal footer -->
+              <div class="modal-footer d-flex justify-content-center">
+                <button
+                  type="button"
+                  class="btn btn-success mx-2"
+                  (click)="matchDeclare()"
+                >
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger mx-2"
+                  id="closemodal"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- The Modal End -->
+      </div>
+    </div>
+  </div>
+</div>

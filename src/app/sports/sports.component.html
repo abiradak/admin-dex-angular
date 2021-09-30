@@ -1,0 +1,95 @@
+<div class="sports mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <h3>Sports</h3>
+                        <button class="btn cstm-btn-bk btn-sm">
+                          <i class="fa fa-soccer-ball-o"></i> New Sport
+                        </button>
+                      </div>
+                    <div class="card-body">
+                        <div id="form-wrapper"><form id="form-add-sport" class="mb-4 border" method="POST" enctype="multipart/form-data">
+                            <div class="border-bottom p-3">
+                                <div class="row mb-2">
+                                    <div class="col-md-4 col-sm-7 mt-2">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control username" name="name" required="" minlength="4">				
+                                    </div>
+                                    <div class="col-md-3 col-sm-5 mt-2">
+                                        <label class="small">Event Type ID ( Betfair )</label>
+                                        <input type="text" class="form-control" name="event_type_id" required="" minlength="1">				
+                                    </div>			
+                                    <div class="col-md-5 col-sm-12 mt-2">
+                                        <div class="form-group">
+                                            <label>Upload Image (800x450)</label>
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                                    <span class="btn btn-secondary cstm-btn-bk btn-file">
+                                                        Browse… <input type="file" name="display_picture" id="display_picture">
+                                                    </span>
+                                                </span>
+                                                <input type="text" class="form-control" readonly="">
+                                            </div>
+                                            <img id="img-upload">
+                                        </div>
+                                    </div>			
+                                </div>		
+                            </div>		
+                            <div class="row mt-2 mb-4">
+                                <div class="col text-right">
+                                    <button id="cancel-it" class="btn btn-danger btn-md mr-1"> <i class="fa fa-window-close"></i> Cancel</button>
+                                    <button id="save-it" class="btn btn-success btn-md mr-3"> <i class="fa fa-save"></i>  Save</button>
+                                </div>
+                            </div>
+                        </form>
+                     </div>
+                        <div class="row">
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <div class="card w-100">
+                                    <div class="card-header">		  	
+                                       <a href="#"><h5 class="text-center p-0 m-0 mt-1">Card Games</h5></a>	  	
+                                   </div>
+                                   <div class="card-body">
+                                       <a href="#"><img style="min-height: 160px; max-width: 100%;" src="../../assets/images/default-sport.jpg"></a>
+                                   </div>
+                               </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <div class="card w-100">
+                                    <div class="card-header">		  	
+                                       <a href="#"><h5 class="text-center p-0 m-0 mt-1">Football</h5></a>	  	
+                                   </div>
+                                   <div class="card-body">
+                                       <a href="#"><img style="min-height: 160px; max-width: 100%;" src="../../assets/images/football.png"></a>
+                                   </div>
+                               </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <div class="card w-100">
+                                    <div class="card-header">		  	
+                                       <a href="#"><h5 class="text-center p-0 m-0 mt-1">Tennis</h5></a>	  	
+                                   </div>
+                                   <div class="card-body">
+                                       <a href="#"><img style="min-height: 160px; max-width: 100%;" src="../../assets/images/default-sport.jpg"></a>
+                                   </div>
+                               </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <div class="card w-100">
+                                    <div class="card-header">		  	
+                                       <a href="#"><h5 class="text-center p-0 m-0 mt-1">Cicket</h5></a>	  	
+                                   </div>
+                                   <div class="card-body">
+                                       <a href="#"><img style="min-height: 160px; max-width: 100%;" src="../../assets/images/cricket.jpg"></a>
+                                   </div>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

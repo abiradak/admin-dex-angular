@@ -1,0 +1,25 @@
+.show-run ul{
+    padding: 0px;
+    margin: 0px;
+}
+.show-run ul li{
+    width: 35px;
+    display: inline-block;
+    height: 35px;
+    background: #ccc;
+    margin: 4px;
+    text-align: center;
+    line-height: 35px;
+    font-weight: bold;
+    border-radius: 50px;
+    font-size: 16px;
+}
+.scrore-table tr td input{
+    margin: 0px;
+    width: 60px;
+    height: 30px;
+}
+.run-dashboard span{
+    display: inline-block;
+    margin: 5px;
+}

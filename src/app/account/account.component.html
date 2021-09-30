@@ -1,0 +1,707 @@
+<form [formGroup]="account" class="mb-4 border" *ngIf = "accountForm == true">
+  <div class="border-bottom p-3">
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <h3>Add Account</h3>
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-12 mt-2">
+        <div class="form-group">
+          <label for="exampleFormControlSelect1">Select Role</label>
+          <select
+            #mySelect
+            class="form-control"
+            (change)="setFormRoleWise(mySelect.value)"
+            formControlName="role"
+            id="exampleFormControlSelect1"
+          >
+            <option selected value="">Choose Role</option>
+            <option *ngFor="let role of roles" value="{{ role.value }}">
+              {{ role.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-12 mt-2"
+        *ngIf="showMaster == true && response"
+      >
+        <div class="form-group">
+          <label for="exampleFormControlSelect2">Select {{ header }}</label>
+          <select
+            #mySelect
+            class="form-control"
+            formControlName="selectMaster"
+            (change)="selectMaster(mySelect.value)"
+            [ngClass]="{
+              'is-invalid':
+                account.controls?.selectMaster?.invalid &&
+                account.controls?.selectMaster?.touched
+            }"
+          >
+            <option selected value="">Choose Master</option>
+            <option *ngFor="let item of masters" value="{{ item.id }}">
+              {{ item.username }}
+            </option>
+          </select>
+          <div
+            *ngIf="account.controls?.selectMaster?.errors?.required"
+            class="invalid-feedback"
+          >
+            Please Choose Master
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-12 mt-2">
+        <label>UserName</label>
+        <input
+          type="text"
+          formControlName="username"
+          class="form-control"
+          disabled
+          [ngClass]="{
+            'is-invalid':
+              account.controls?.username?.invalid &&
+              account.controls?.username?.touched
+          }"
+        />
+        <div
+          *ngIf="account.controls?.username?.errors?.required"
+          class="invalid-feedback"
+        >
+          username is required.
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-12 mt-2">
+        <label>Name</label>
+        <input
+          type="text"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              account.controls?.name?.invalid && account.controls?.name?.touched
+          }"
+          formControlName="name"
+        />
+        <div
+          *ngIf="account.controls?.name?.errors?.required"
+          class="invalid-feedback"
+        >
+          name is required.
+        </div>
+        <div
+          *ngIf="account.controls?.name?.errors?.maxlength"
+          class="invalid-feedback"
+        >
+          name can maximum 20 Characters.
+        </div>
+        <div
+          *ngIf="account.controls?.name?.errors?.minlength"
+          class="invalid-feedback"
+        >
+          name will atleast 4 Characters.
+        </div>
+        <div
+          *ngIf="account.controls?.name?.errors?.pattern"
+          class="invalid-feedback"
+        >
+          name Will include only Numbers.
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-12 mt-2">
+        <label
+          >Password
+          <p
+            id="password-strength-text"
+            style="
+              position: absolute;
+              font-size: smaller;
+              right: 15px;
+              top: 0px;
+            "
+          ></p>
+        </label>
+        <input
+          type="password"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              account.controls?.password?.invalid &&
+              account.controls?.password?.touched
+          }"
+          formControlName="password"
+        />
+        <div
+          *ngIf="account.controls?.password?.errors?.required"
+          class="invalid-feedback"
+        >
+          password is required.
+        </div>
+        <div
+          *ngIf="account.controls?.password?.errors?.maxlength"
+          class="invalid-feedback"
+        >
+          password can maximum 20 Characters.
+        </div>
+        <div
+          *ngIf="account.controls?.password?.errors?.minlength"
+          class="invalid-feedback"
+        >
+          password will atleast 6 Characters.
+        </div>
+        <div
+          *ngIf="account.controls?.password?.errors?.pattern"
+          class="invalid-feedback"
+        >
+          invalid password Min 6 char (numbers 0-9, letters A-Z).
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-12 mt-2">
+        <label>Mobile</label>
+        <input
+          type="text"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              account.controls?.mobile?.invalid &&
+              account.controls?.mobile?.touched
+          }"
+          formControlName="mobile"
+        />
+        <div
+          *ngIf="account.controls?.mobile?.errors?.required"
+          class="invalid-feedback"
+        >
+          mobile is required.
+        </div>
+        <div
+          *ngIf="account.controls?.mobile?.errors?.maxlength"
+          class="invalid-feedback"
+        >
+          mobile can maximum 10 Characters.
+        </div>
+        <div
+          *ngIf="account.controls?.mobile?.errors?.minlength"
+          class="invalid-feedback"
+        >
+          mobile will atleast 10 Characters.
+        </div>
+        <div
+          *ngIf="account.controls?.mobile?.errors?.pattern"
+          class="invalid-feedback"
+        >
+          mobile Will include only Numbers.
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-12 mt-2">
+        <label>
+          Share
+          {{
+            parentShare ? "[ Parent Share (" + parentShare + ") ( % ) ]" : ""
+          }}
+        </label>
+        <input
+          type="number"
+          class="form-control"
+          max="100"
+          min="0"
+          formControlName="share"
+          [ngClass]="{
+            'is-invalid':
+              account.controls?.share?.invalid &&
+              account.controls?.share?.touched
+          }"
+        />
+        <div
+          *ngIf="account.controls?.share?.errors?.required"
+          class="invalid-feedback"
+        >
+          share is required.
+        </div>
+        <div
+          *ngIf="account.controls?.share?.errors?.max"
+          class="invalid-feedback"
+        >
+          share cannot be greater than parent share.
+        </div>
+        <div
+          *ngIf="account.controls?.share?.errors?.maxlength"
+          class="invalid-feedback"
+        >
+          share cannot be greater 99999999.
+        </div>
+        <div
+          *ngIf="account.controls?.share?.errors?.min"
+          class="invalid-feedback"
+        >
+          share will atleast 1.
+        </div>
+        <div
+          *ngIf="account.controls?.mobile?.errors?.pattern"
+          class="invalid-feedback"
+        >
+          share Will include only Numbers.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="border-bottom p-3">
+    <div class="row">
+      <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+        <label
+          >Balance
+          {{ parentLimit ? "[ Parent Limit (" + parentLimit + ") ]" : "" }}
+        </label>
+        <input
+          type="number"
+          class="form-control"
+          formControlName="current"
+          [ngClass]="{
+            'is-invalid':
+              account.controls?.current?.invalid &&
+              account.controls?.current?.touched
+          }"
+        />
+        <div
+          *ngIf="account.controls?.current?.errors?.required"
+          class="invalid-feedback"
+        >
+          current is required.
+        </div>
+        <div
+          *ngIf="account.controls?.current?.errors?.max"
+          class="invalid-feedback"
+        >
+          current cannot be greater that parent limit.
+        </div>
+        <div
+          *ngIf="account.controls?.current?.errors?.min"
+          class="invalid-feedback"
+        >
+          current will atleast 1.
+        </div>
+        <div
+          *ngIf="account.controls?.mobile?.errors?.pattern"
+          class="invalid-feedback"
+        >
+          current Will include only Numbers.
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+        <label
+          >Match Commission
+          {{
+            parentMatchcommission
+              ? "[ Parent (" + parentMatchcommission + ") ( % ) ]"
+              : ""
+          }}</label
+        >
+        <input
+          type="number"
+          class="form-control"
+          max="100"
+          min="0"
+          formControlName="match_commission"
+          [ngClass]="{
+            'is-invalid':
+              account.controls?.match_commission?.invalid &&
+              account.controls?.match_commission?.touched
+          }"
+        />
+        <div
+          *ngIf="account.controls?.match_commission?.errors?.required"
+          class="invalid-feedback"
+        >
+          match_commission is required.
+        </div>
+        <div
+          *ngIf="account.controls?.match_commission?.errors?.maxlength"
+          class="invalid-feedback"
+        >
+          match_commission can maximum 99.
+        </div>
+        <div
+          *ngIf="account.controls?.match_commission?.errors?.max"
+          class="invalid-feedback"
+        >
+          match_commission cannot greater than parent limit.
+        </div>
+        <div
+          *ngIf="account.controls?.match_commission?.errors?.min"
+          class="invalid-feedback"
+        >
+          match_commission will atleast 0.
+        </div>
+        <div
+          *ngIf="account.controls?.mobile?.errors?.pattern"
+          class="invalid-feedback"
+        >
+          match_commission Will include only Numbers.
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+        <label
+          >Session Commission
+          {{
+            parentSessioncommission
+              ? "[ Parent (" + parentSessioncommission + ") ( % ) ]"
+              : ""
+          }}</label
+        >
+        <input
+          type="number"
+          class="form-control"
+          max="100"
+          min="0"
+          formControlName="session_commission"
+          [ngClass]="{
+            'is-invalid':
+              account.controls?.session_commission?.invalid &&
+              account.controls?.session_commission?.touched
+          }"
+        />
+        <div
+          *ngIf="account.controls?.session_commission?.errors?.required"
+          class="invalid-feedback"
+        >
+          session_commission is required.
+        </div>
+        <div
+          *ngIf="account.controls?.session_commission?.errors?.maxlength"
+          class="invalid-feedback"
+        >
+          session_commission can maximum 100.
+        </div>
+        <div
+          *ngIf="account.controls?.session_commission?.errors?.max"
+          class="invalid-feedback"
+        >
+          session_commission cannot greater than parent limit.
+        </div>
+        <div
+          *ngIf="account.controls?.session_commission?.errors?.min"
+          class="invalid-feedback"
+        >
+          session_commission will atleast 0.
+        </div>
+        <div
+          *ngIf="account.controls?.mobile?.errors?.pattern"
+          class="invalid-feedback"
+        >
+          session_commission Will include only Numbers.
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+        <label>Session bet ( Max )</label>
+        <input
+          type="number"
+          class="form-control"
+          formControlName="session_bet_max"
+          [ngClass]="{
+            'is-invalid':
+              account.controls?.session_bet_max?.invalid &&
+              account.controls?.session_bet_max?.touched
+          }"
+        />
+        <div
+          *ngIf="account.controls?.session_bet_max?.errors?.required"
+          class="invalid-feedback"
+        >
+          session_bet_max is required.
+        </div>
+        <div
+          *ngIf="account.controls?.session_bet_max?.errors?.max"
+          class="invalid-feedback"
+        >
+          session_bet_max can maximum 100.
+        </div>
+        <div
+          *ngIf="account.controls?.session_bet_max?.errors?.min"
+          class="invalid-feedback"
+        >
+          session_bet_max will atleast 0.
+        </div>
+        <div
+          *ngIf="account.controls?.mobile?.errors?.pattern"
+          class="invalid-feedback"
+        >
+          session_bet_max Will include only Numbers.
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+        <label>Session bet ( Min )</label>
+        <input
+          type="number"
+          class="form-control"
+          formControlName="session_bet_min"
+          [ngClass]="{
+            'is-invalid':
+              account.controls?.session_bet_min?.invalid &&
+              account.controls?.session_bet_min?.touched
+          }"
+        />
+        <div
+          *ngIf="account.controls?.session_bet_min?.errors?.required"
+          class="invalid-feedback"
+        >
+          session_bet_min is required.
+        </div>
+        <div
+          *ngIf="account.controls?.session_bet_min?.errors?.max"
+          class="invalid-feedback"
+        >
+          session_bet_min can maximum 100.
+        </div>
+        <div
+          *ngIf="account.controls?.session_bet_min?.errors?.min"
+          class="invalid-feedback"
+        >
+          session_bet_min will atleast 0.
+        </div>
+        <div
+          *ngIf="account.controls?.mobile?.errors?.pattern"
+          class="invalid-feedback"
+        >
+          session_bet_min Will include only Numbers.
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+        <label>Match bet ( Max )</label>
+        <input
+          type="number"
+          class="form-control"
+          formControlName="match_bet_max"
+          [ngClass]="{
+            'is-invalid':
+              account.controls?.match_bet_max?.invalid &&
+              account.controls?.match_bet_max?.touched
+          }"
+        />
+        <div
+          *ngIf="account.controls?.match_bet_max?.errors?.required"
+          class="invalid-feedback"
+        >
+          match_bet_max is required.
+        </div>
+        <div
+          *ngIf="account.controls?.match_bet_max?.errors?.max"
+          class="invalid-feedback"
+        >
+          match_bet_max can maximum 100.
+        </div>
+        <div
+          *ngIf="account.controls?.match_bet_max?.errors?.min"
+          class="invalid-feedback"
+        >
+          match_bet_max will atleast 0.
+        </div>
+        <div
+          *ngIf="account.controls?.mobile?.errors?.pattern"
+          class="invalid-feedback"
+        >
+          match_bet_max Will include only Numbers.
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+        <label>Match bet ( Min )</label>
+        <input
+          type="number"
+          class="form-control"
+          formControlName="match_bet_min"
+          [ngClass]="{
+            'is-invalid':
+              account.controls?.match_bet_min?.invalid &&
+              account.controls?.match_bet_min?.touched
+          }"
+        />
+        <div
+          *ngIf="account.controls?.match_bet_min?.errors?.required"
+          class="invalid-feedback"
+        >
+          match_bet_min is required.
+        </div>
+        <div
+          *ngIf="account.controls?.match_bet_min?.errors?.max"
+          class="invalid-feedback"
+        >
+          match_bet_min can maximum 100.
+        </div>
+        <div
+          *ngIf="account.controls?.match_bet_min?.errors?.min"
+          class="invalid-feedback"
+        >
+          match_bet_min will atleast 0.
+        </div>
+        <div
+          *ngIf="account.controls?.mobile?.errors?.pattern"
+          class="invalid-feedback"
+        >
+          match_bet_min Will include only Numbers.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-2 mb-4">
+    <div class="col text-right">
+      <button id="cancel-it" (click) = "accountForm = false" class="btn btn-danger mx-1 btn-md">
+        <i class="fa fa-window-close"></i> Cancel
+      </button>
+      <button
+        id="save-it"
+        (click)="submit()"
+        class="btn btn-success btn-md mx-1 mr-3"
+      >
+        <i class="fa fa-save"></i> Save
+      </button>
+    </div>
+  </div>
+</form>
+
+<div class="account-table">
+  <button class="btn btn-success float-right btn-sm" (click) = "accountForm = true"> Add Account</button>
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item btn btn-info" *ngFor = "let item of roles">
+      <a class="nav-link active" id="{{ item.name }}-tab" data-toggle="tab" (click)= "getChildren(item.value)" role="tab" aria-controls="item.name" aria-selected="true">{{ item.name }}</a>
+    </li>
+
+  </ul>
+
+  
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="subadmin" role="tabpanel" aria-labelledby="subadmin-tab"> 
+      <table class="table table-striped table-bordered w-100" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>User Name</th>
+          <th>Mobile</th>
+          <th>Share</th>
+          <th>Balance</th>
+          <th>Match Commission</th>
+          <th>Session Commission</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let item of childlist">
+          <td>{{ roles_list[item.role] }}</td>
+          <td>{{ item.name }} ({{ item.username }})</td>
+          <td>{{ item.mobile }}</td>
+          <td>{{ item.share }}</td>
+          <td>{{ item.current }}</td>
+          <td>{{ item.match_commission }}</td>
+          <td>{{ item.session_commission }}</td>
+          <td><button class="btn btn-info btn-sm" [routerLink]="['/update-account/'+ item.id]">Edit</button></td>
+          <!-- <td><button class="btn btn-info btn-sm">Edit</button></td> -->
+        </tr>
+      </tbody>
+    </table></div>
+    <div class="tab-pane fade show" id="supermaster" role="tabpanel" aria-labelledby="supermaster-tab"> 
+      <table class="table table-striped table-bordered w-100" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>User Name</th>
+          <th>Mobile</th>
+          <th>Share</th>
+          <th>Balance</th>
+          <th>Match Commission</th>
+          <th>Session Commission</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let item of childlist">
+          <td>{{ roles_list[item.role] }}</td>
+          <td>{{ item.name }} ({{ item.username }})</td>
+          <td>{{ item.mobile }}</td>
+          <td>{{ item.share }}</td>
+          <td>{{ item.current }}</td>
+          <td>{{ item.match_commission }}</td>
+          <td>{{ item.session_commission }}</td>
+          <td><button class="btn btn-info btn-sm" [routerLink]="['/update-account/'+ item.id]">Edit</button></td>
+          <!-- <td><button class="btn btn-info btn-sm">Edit</button></td> -->
+        </tr>
+      </tbody>
+    </table></div>
+    <div class="tab-pane fade show" id="master" role="tabpanel" aria-labelledby="master-tab"> 
+      <table class="table table-striped table-bordered w-100" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>User Name</th>
+          <th>Mobile</th>
+          <th>Share</th>
+          <th>Balance</th>
+          <th>Match Commission</th>
+          <th>Session Commission</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let item of childlist">
+          <td>{{ roles_list[item.role] }}</td>
+          <td>{{ item.name }} ({{ item.username }})</td>
+          <td>{{ item.mobile }}</td>
+          <td>{{ item.share }}</td>
+          <td>{{ item.current }}</td>
+          <td>{{ item.match_commission }}</td>
+          <td>{{ item.session_commission }}</td>
+          <td><button class="btn btn-info btn-sm" [routerLink]="['/update-account/'+ item.id]">Edit</button></td>
+          <!-- <td><button class="btn btn-info btn-sm">Edit</button></td> -->
+        </tr>
+      </tbody>
+    </table></div>
+    <div class="tab-pane fade show" id="superagent" role="tabpanel" aria-labelledby="superagent-tab"> 
+      <table class="table table-striped table-bordered w-100" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>User Name</th>
+          <th>Mobile</th>
+          <th>Share</th>
+          <th>Balance</th>
+          <th>Match Commission</th>
+          <th>Session Commission</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let item of childlist">
+          <td>{{ roles_list[item.role] }}</td>
+          <td>{{ item.name }} ({{ item.username }})</td>
+          <td>{{ item.mobile }}</td>
+          <td>{{ item.share }}</td>
+          <td>{{ item.current }}</td>
+          <td>{{ item.match_commission }}</td>
+          <td>{{ item.session_commission }}</td>
+          <td><button class="btn btn-info btn-sm" [routerLink]="['/update-account/'+ item.id]">Edit</button></td>
+          <!-- <td><button class="btn btn-info btn-sm">Edit</button></td> -->
+        </tr>
+      </tbody>
+    </table></div>
+    <div class="tab-pane fade show" id="agent" role="tabpanel" aria-labelledby="agent-tab"> 
+      <table class="table table-striped table-bordered w-100" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>User Name</th>
+          <th>Mobile</th>
+          <th>Share</th>
+          <th>Balance</th>
+          <th>Match Commission</th>
+          <th>Session Commission</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let item of childlist">
+          <td>{{ roles_list[item.role] }}</td>
+          <td>{{ item.name }} ({{ item.username }})</td>
+          <td>{{ item.mobile }}</td>
+          <td>{{ item.share }}</td>
+          <td>{{ item.current }}</td>
+          <td>{{ item.match_commission }}</td>
+          <td>{{ item.session_commission }}</td>
+          <td><button class="btn btn-info btn-sm" [routerLink]="['/update-account/'+ item.id]">Edit</button></td>
+          <!-- <td><button class="btn btn-info btn-sm">Edit</button></td> -->
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+ 
+</div>

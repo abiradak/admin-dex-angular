@@ -1,0 +1,796 @@
+<div class="match-sesstion mt-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 *ngIf="sessionData.match" class="float-left">
+              {{
+                sessionData.match.long_name ? sessionData.match.long_name : ""
+              }}
+            </h5>
+            <a
+              href="#"
+              class="btn btn-warning btn-sm float-right"
+            >
+              <i class="fa fa-gear"></i> All Matches
+            </a>
+            <a
+              (click)="showSession()"
+              id="create-market"
+              class="btn btn-info btn-sm float-right mr-2"
+            >
+              <i class="fa fa-plus"></i> New Session
+            </a>
+          </div>
+          <div class="card-body">
+            <!-- add session wrapper -->
+            <div *ngIf="showSessionForm == true" id="form-wrapper">
+              <form [formGroup]="session" class="mb-4 border">
+                <div class="border-bottom p-3">
+                  <div class="row mb-1">
+                    <div class="col-lg-6 col-md-12 col-sm-12 mt-2">
+                      <label>Session Name</label>
+                      <input
+                        type="text"
+                        formControlName="name"
+                        [ngClass]="{
+                          'is-invalid':
+                            session.controls?.name?.invalid &&
+                            session.controls?.name?.touched
+                        }"
+                        class="form-control"
+                      />
+                      <div
+                        *ngIf="session.controls?.name?.errors?.required"
+                        class="invalid-feedback"
+                      >
+                        Name is required.
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-12 mt-2">
+                      <label>Bet Min</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        maxlength="11"
+                        numbers="true"
+                        value="500"
+                        formControlName="session_bet_min"
+                        [ngClass]="{
+                          'is-invalid':
+                            session.controls?.session_bet_min?.invalid &&
+                            session.controls?.session_bet_min?.touched
+                        }"
+                        class="form-control"
+                      />
+                      <div
+                        *ngIf="
+                          session.controls?.session_bet_min?.errors?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        Bet Min is required.
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-12 mt-2">
+                      <label>Bet Max</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        maxlength="11"
+                        numbers="true"
+                        value="50000"
+                        formControlName="session_bet_max"
+                        [ngClass]="{
+                          'is-invalid':
+                            session.controls?.session_bet_max?.invalid &&
+                            session.controls?.session_bet_max?.touched
+                        }"
+                        class="form-control"
+                      />
+                      <div
+                        *ngIf="
+                          session.controls?.session_bet_max?.errors?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        Bet Max is required.
+                      </div>
+                    </div>
+
+                    <!-- <input type="hidden" name="type" value="0"> -->
+                  </div>
+                  <div class="row mb-1">
+                    <div class="col-lg-3 col-md-6 col-sm-12 mt-2">
+                      <label>Grp</label>
+                      <select
+                        formControlName="grp"
+                        [ngClass]="{
+                          'is-invalid':
+                            session.controls?.grp?.invalid &&
+                            session.controls?.grp?.touched
+                        }"
+                        class="form-control"
+                      >
+                        <option value="0">Session</option>
+                        <option value="1">Extra</option>
+                        <option value="5">Extra 2</option>
+                        <option value="2">By Over</option>
+                        <option value="3">By Ball</option>
+                        <option value="4">Baller Session</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12 mt-2">
+                      <label>Bet Min</label>
+                      <select
+                        formControlName="type"
+                        class="form-control"
+                        [ngClass]="{
+                          'is-invalid':
+                            session.controls?.type?.invalid &&
+                            session.controls?.type?.touched
+                        }"
+                      >
+                        <option value="0" selected="">YES-NOT</option>
+                        <option value="-1">ODD-EVEN</option>
+                        <option value="-2">UNDER-OVER</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12 mt-2"></div>
+                    <div class="col-lg-3 col-md-6 col-sm-12 mt-2"></div>
+                  </div>
+                </div>
+                <div class="row mt-2 mb-4">
+                  <div class="col-12 col-sm-6 text-left pl-4">
+                    <label class="switch">
+                      <input
+                        type="checkbox"
+                        formControlName="session_commission"
+                        class="commission-it"
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                    <label class="pl-2 h6"> Session Commission</label>
+                  </div>
+                  <div class="col-12 col-sm-6 text-right">
+                    <button
+                      id="cancel-it"
+                      (click)="showSessionForm = false"
+                      class="btn btn-danger btn-sm mr-1 mb-1"
+                    >
+                      <i class="fa fa-window-close"></i> Cancel
+                    </button>
+                    <button
+                      id="save-it"
+                      (click)="submit()"
+                      class="btn btn-success btn-sm mr-3 mb-1"
+                    >
+                      <i class="fa fa-save"></i> Save
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- add session wraper -->
+            <!-- edit session wrapper -->
+            <div *ngIf="showSessionEditForm == true" id="form-wrapper">
+              <form [formGroup]="sessionedit" class="mb-4 border">
+                <div class="border-bottom p-3">
+                  <div class="row mb-1">
+                    <div class="col-lg-6 col-md-12 col-sm-12 mt-2">
+                      <label>Session Name</label>
+                      <input
+                        type="text"
+                        formControlName="name"
+                        [ngClass]="{
+                          'is-invalid':
+                            sessionedit.controls?.name?.invalid &&
+                            sessionedit.controls?.name?.touched
+                        }"
+                        class="form-control"
+                      />
+                      <div
+                        *ngIf="sessionedit.controls?.name?.errors?.required"
+                        class="invalid-feedback"
+                      >
+                        Name is required.
+                      </div>
+                    </div>
+                    <input
+                      type="hidden"
+                      formControlName="market_id"
+                    />
+                    <div class="col-lg-3 col-md-4 col-sm-12 mt-2">
+                      <label>Bet Min</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        maxlength="11"
+                        numbers="true"
+                        value="500"
+                        formControlName="session_bet_min"
+                        [ngClass]="{
+                          'is-invalid':
+                          sessionedit.controls?.session_bet_min?.invalid &&
+                          sessionedit.controls?.session_bet_min?.touched
+                        }"
+                        class="form-control"
+                      />
+                      <div
+                        *ngIf="
+                        sessionedit.controls?.session_bet_min?.errors?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        Bet Min is required.
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-12 mt-2">
+                      <label>Bet Max</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        maxlength="11"
+                        numbers="true"
+                        value="50000"
+                        formControlName="session_bet_max"
+                        [ngClass]="{
+                          'is-invalid':
+                          sessionedit.controls?.session_bet_max?.invalid &&
+                          sessionedit.controls?.session_bet_max?.touched
+                        }"
+                        class="form-control"
+                      />
+                      <div
+                        *ngIf="
+                          sessionedit.controls?.session_bet_max?.errors?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        Bet Max is required.
+                      </div>
+                    </div>
+
+                    <!-- <input type="hidden" name="type" value="0"> -->
+                  </div>
+                  <div class="row mb-1">
+                    <div class="col-lg-3 col-md-6 col-sm-12 mt-2">
+                      <label>Grp</label>
+                      <select
+                        formControlName="grp"
+                        [ngClass]="{
+                          'is-invalid':
+                          sessionedit.controls?.grp?.invalid &&
+                          sessionedit.controls?.grp?.touched
+                        }"
+                        class="form-control"
+                      >
+                        <option value="0">Session</option>
+                        <option value="1">Extra</option>
+                        <option value="5">Extra 2</option>
+                        <option value="2">By Over</option>
+                        <option value="3">By Ball</option>
+                        <option value="4">Baller Session</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12 mt-2">
+                      <label>Bet Min</label>
+                      <select
+                        formControlName="type"
+                        class="form-control"
+                        [ngClass]="{
+                          'is-invalid':
+                          sessionedit.controls?.type?.invalid &&
+                          sessionedit.controls?.type?.touched
+                        }"
+                      >
+                        <option value="0" selected="">YES-NOT</option>
+                        <option value="-1">ODD-EVEN</option>
+                        <option value="-2">UNDER-OVER</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12 mt-2"></div>
+                    <div class="col-lg-3 col-md-6 col-sm-12 mt-2"></div>
+                  </div>
+                </div>
+                <div class="row mt-2 mb-4">
+                  <div class="col-12 col-ms-6 text-left pl-4">
+                    <label class="switch">
+                      <input
+                        type="checkbox"
+                        formControlName="session_commission"
+                        class="commission-it"
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                    <label class="pl-2 h6"> Session Commission</label>
+                  </div>
+                  <div class="col-12 col-ms-6 text-right">
+                    <button
+                      id="cancel-it"
+                      (click)="showSessionEditForm = false"
+                      class="btn btn-danger btn-sm mr-1 mb-1"
+                    >
+                      <i class="fa fa-window-close" ></i> Cancel
+                    </button>
+                    <button
+                      id="save-it"
+                      (click)="sessionUpdate()"
+                      class="btn btn-success btn-sm mr-3 mb-1"
+                    >
+                      <i class="fa fa-save"></i> Update
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- edit session wraper -->
+            <!-- tab start -->
+            <ul class="nav nav-pills mb-3 admin-tab" id="pills-tab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link" id="pills-declared-tab" data-toggle="pill" href="#pills-declared" role="tab" aria-controls="pills-declared" aria-selected="true">Declared</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-completed-tab" data-toggle="pill" href="#pills-completed" role="tab" aria-controls="pills-completed" aria-selected="false">Completed</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Active</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-extra-tab" data-toggle="pill" href="#pills-extra" role="tab" aria-controls="pills-extra" aria-selected="false">Extra</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-extra2-tab" data-toggle="pill" href="#pills-extra2" role="tab" aria-controls="pills-extra2" aria-selected="false">Extra 2</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-ballers-tab" data-toggle="pill" href="#pills-ballers" role="tab" aria-controls="pills-ballers" aria-selected="false">Baller's</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-byover-tab" data-toggle="pill" href="#pills-byover" role="tab" aria-controls="pills-byover" aria-selected="false">By Over</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-byball-tab" data-toggle="pill" href="#pills-byball" role="tab" aria-controls="pills-byball" aria-selected="false">By Ball</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-evenodd-tab" data-toggle="pill" href="#pills-evenodd" role="tab" aria-controls="pills-evenodd" aria-selected="false">Even Odd</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-underover-tab" data-toggle="pill" href="#pills-underover" role="tab" aria-controls="pills-underover" aria-selected="false">Under Over</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-session-tab" data-toggle="pill" href="#pills-session" role="tab" aria-controls="pills-session" aria-selected="false">Session</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-deleted-tab" data-toggle="pill" href="#pills-deleted" role="tab" aria-controls="pills-deleted" aria-selected="false">Deleted</a>
+              </li>
+            </ul>
+            <div class="tab-content overflow-auto res-table" id="pills-tabContent">
+              <div class="tab-pane fade " id="pills-declared" role="tabpanel" aria-labelledby="pills-declared-tab">
+                <table
+                class="table table-striped table-bordered"
+                style="width: 100%; border: 1px solid"
+              >
+                <thead>
+                  <tr>
+                    <th width="60%">Declared Session</th>
+                    <th width="10%">Value</th>
+                    <th width="30%"></th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="sessionData.sessions_declared">
+                  <tr *ngFor="let dsession of sessionData.sessions_declared">
+                    <td>{{ dsession.name }}</td>
+                    <td>{{ dsession.result }}</td>
+                    <td class="text-center">
+                      <button
+                        class="btn btn-info btn-sm mx-1"
+                        (click)="
+                          declareSession(
+                            dsession.event_id,
+                            dsession.market_id,
+                            dsession.result,
+                            '0'
+                          )
+                        "
+                      >
+                        <i class="fa fa-thumbs-down"></i> UnDeclare
+                      </button>
+                      <button class="btn btn-warning btn-sm text-muted mx-1">
+                        <i class="fa fa-list"></i> Show Bets
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody></tbody>
+              </table>
+              </div>
+              <div class="tab-pane fade" id="pills-completed" role="tabpanel" aria-labelledby="pills-completed-tab">
+                <table
+                class="table table-striped table-bordered"
+                style="width: 100%; border: 1px solid"
+              >
+                <thead>
+                  <tr>
+                    <th>Completed Session</th>
+                    <th>Value</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="sessionData.sessions_completed">
+                  <tr *ngFor="let csession of sessionData.sessions_completed">
+                    <td>{{ csession.name }}</td>
+                    <td>
+                      <input
+                        type="number"
+                        [(ngModel)]="result"
+                        style="width: 100px"
+                      />
+                    </td>
+                    <td class="text-right">
+                      <button
+                        class="btn btn-sm btn-success mx-1"
+                        (click)="
+                          declareSession(
+                            csession.event_id,
+                            csession.market_id,
+                            result,
+                            '1'
+                          )
+                        "
+                      >
+                        <i class="fa fa-thumbs-up"></i> Declare
+                      </button>
+                      <button class="btn btn-sm btn-danger mx-1" (click) = "conplete(csession, '0')">
+                        <i class="fa fa-times"></i> UnComplete
+                      </button>
+                      <button class="btn btn-sm btn-info mx-1">
+                        <i class="fa fa-book"></i> Show Bets
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+              <div class="tab-pane fade show active" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                <table
+                class="table table-striped table-bordered"
+                style="width: 100%; border: 1px solid"
+              >
+                <thead>
+                  <tr>
+                    <th>Active Session</th>
+                    <th class="text-center">NOT</th>
+                    <th class="text-center">YES</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="sessionData.sessions_active">
+                  <tr *ngFor="let ses of sessionData.sessions_active">
+                    <td
+                      [ngClass]="{
+                        'bg-warning':
+                        ses.SessInptNo && ses.SessInptNo != 0 || ses.SessInptYes != 0
+                      }"
+                    >
+                      {{ ses.name }}
+                    </td>
+                    <td class="text-center lay-bg">
+                      <span
+                        [ngClass]="{
+                          suspn: ses.SessInptNo && ses.SessInptNo == 0
+                        }"
+                        >{{
+                          ses.SessInptNo && ses.SessInptNo != 0 ? ses.SessInptNo : "SUSPENDED"
+                        }}</span
+                      >
+                    </td>
+                    <td class="text-center bk-bg">
+                      <span
+                        [ngClass]="{
+                          suspn: ses.SessInptYes == 0
+                        }"
+                        >{{
+                          ses.SessInptYes && ses.SessInptYes != 0 ? ses.SessInptYes : "SUSPENDED"
+                        }}</span
+                      >
+                    </td>
+                    <td class="text-right">
+                      <button
+                        class="btn btn-sm mb-1 btn-warning mx-1"
+                        (click)="sessionStatus(ses.market_id, '0')"
+                      >
+                        <i class="fa fa-thumbs-down"></i> Deactivate
+                      </button>
+                      <button class="btn btn-sm mb-1 cstm-btn-bk mx-1" (click) = "showEditSession(ses)">
+                        <i class="fa fa-edit"></i> Edit
+                      </button>
+                      <button class="btn btn-sm mb-1 btn-success mx-1" (click)= "conplete(ses , '1')">
+                        <i class="fa fa-check"></i> Completed
+                      </button>
+                      <button class="btn btn-sm mb-1 btn-info mx-1">
+                        <i class="fa fa-arrow-up"></i> Top
+                      </button>
+                      <button (click) = "manual(ses , ses.manual == 0 ? '1' : '0')" class="btn btn-sm mb-1 btn-{{ ses.manual == 0 ? 'success' : 'danger' }} mx-1">
+                        <i class="fa fa-key"></i>
+                      </button>
+                      <a *ngIf = "ses.manual == 1" target="_blank" [routerLink]="['/session-value/'+ ses.event_id + '/' + ses.market_id]">
+                        <button  class="btn btn-sm mb-1 btn-warning mx-1">
+                          <i class="fa fa-keyboard-o"></i>
+                        </button>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+              <div class="tab-pane fade" id="pills-extra" role="tabpanel" aria-labelledby="pills-extra-tab">
+                <table
+                class="table table-striped table-bordered"
+                style="width: 100%; border: 1px solid"
+              >
+                <thead>
+                  <tr>
+                    <th>Extra Session</th>
+                    <th class="text-center">NOT</th>
+                    <th class="text-center">YES</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!--  row in active_sessions1 -->
+                </tbody>
+              </table>
+              </div>
+              <div class="tab-pane fade" id="pills-extra2" role="tabpanel" aria-labelledby="pills-extra2-tab">
+                <table
+                class="table table-striped table-bordered"
+                style="width: 100%; border: 1px solid"
+              >
+                <thead>
+                  <tr>
+                    <th>Extra Session 2</th>
+                    <th class="text-center">NOT</th>
+                    <th class="text-center">YES</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- row in active_sessions5 -->
+                </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="pills-ballers" role="tabpanel" aria-labelledby="pills-ballers-tab">
+                <table
+                class="table table-striped table-bordered"
+                style="width: 100%; border: 1px solid"
+              >
+                <thead>
+                  <tr>
+                    <th>Baller's Session</th>
+                    <th class="text-center">NOT</th>
+                    <th class="text-center">YES</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- row in active_sessions4 -->
+                </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="pills-byover" role="tabpanel" aria-labelledby="pills-byover-tab">
+                <table
+                class="table table-striped table-bordered"
+                style="width: 100%; border: 1px solid"
+              >
+                <thead>
+                  <tr>
+                    <th>Session By Over</th>
+                    <th class="text-center">NOT</th>
+                    <th class="text-center">YES</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- row in active_sessions2 -->
+                </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="pills-byball" role="tabpanel" aria-labelledby="pills-byball-tab">
+                <table
+                class="table table-striped table-bordered"
+                style="width: 100%; border: 1px solid"
+              >
+                <thead>
+                  <tr>
+                    <th>Session By Ball</th>
+                    <th class="text-center">NOT</th>
+                    <th class="text-center">YES</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- row in active_sessions3 -->
+                </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="pills-evenodd" role="tabpanel" aria-labelledby="pills-evenodd-tab">
+                <table
+                class="table table-striped table-bordered"
+                style="width: 100%; border: 1px solid"
+              >
+                <thead>
+                  <tr>
+                    <th>Even Odd Session</th>
+                    <th class="text-center">NOT</th>
+                    <th class="text-center">YES</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!--  row in active_sessions_eo -->
+                </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="pills-underover" role="tabpanel" aria-labelledby="pills-underover-tab">
+                <table
+                class="table table-striped table-bordered"
+                style="width: 100%; border: 1px solid"
+              >
+                <thead>
+                  <tr>
+                    <th>Under Over Session</th>
+                    <th class="text-center">NOT</th>
+                    <th class="text-center">YES</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!--  row in active_sessions_uo -->
+                </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="pills-session" role="tabpanel" aria-labelledby="pills-session-tab">
+                <table
+                class="table table-striped table-bordered"
+                style="width: 100%"
+              >
+                <thead>
+                  <tr>
+                    <th>Session</th>
+                    <th class="text-center">Yes</th>
+                    <th class="text-center">Not</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="sessionData.sessions_not_active">
+                  <tr *ngFor="let inactive_session of sessionData.sessions_not_active">
+                    <td
+                      [ngClass]="{
+                        'bg-warning':
+                        inactive_session.SessInptNo && inactive_session.SessInptNo != 0 ||
+                        inactive_session.SessInptYes && inactive_session.SessInptYes != 0
+                      }"
+                    >
+                      {{ inactive_session.name }}
+                    </td>
+                    <td class="text-center lay-bg">
+                      <span
+                        [ngClass]="{
+                          suspn: inactive_session.SessInptNo && inactive_session.SessInptNo == 0
+                        }"
+                        >{{
+                          inactive_session.SessInptNo && inactive_session.SessInptNo != 0
+                            ? inactive_session.SessInptNo
+                            : "SUSPENDED"
+                        }}</span
+                      >
+                    </td>
+                    <td class="text-center bk-bg">
+                      <span
+                        [ngClass]="{
+                          suspn: inactive_session.SessInptYes == 0
+                        }"
+                        >{{
+                          inactive_session.SessInptYes && inactive_session.SessInptYes != 0
+                            ? inactive_session.SessInptYes
+                            : "SUSPENDED"
+                        }}</span
+                      >
+                    </td>
+                    <td class="text-right">
+                      <button
+                        class="btn btn-sm btn-info mx-1"
+                        (click)="sessionStatus(inactive_session.market_id, '1')"
+                      >
+                        <i class="fa fa-thumbs-up"></i> Activate
+                      </button>
+                      <button (click) = "deleteSession(inactive_session , '1')" class="btn btn-sm btn-danger mx-1">
+                        <i class="fa fa-trash"></i> Remove
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="pills-deleted" role="tabpanel" aria-labelledby="pills-deleted-tab">
+                <table
+                class="table table-striped table-bordered"
+                style="width: 100%"
+              >
+                <thead>
+                  <tr>
+                    <th>Deleted Session</th>
+                    <th class="text-center">Yes</th>
+                    <th class="text-center">Not</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="sessionData.sessions_deleted">
+                  <tr *ngFor="let deleted_session of sessionData.sessions_deleted">
+                    <td
+                      [ngClass]="{
+                        'bg-warning':
+                        deleted_session.SessInptNo && deleted_session.SessInptNo != 0 ||
+                        deleted_session.SessInptYes && deleted_session.SessInptYes != 0
+                      }"
+                    >
+                      {{ deleted_session.name }}
+                    </td>
+                    <td class="text-center lay-bg">
+                      <span
+                        [ngClass]="{
+                          suspn: deleted_session.SessInptNo && deleted_session.SessInptNo == 0
+                        }"
+                        >{{
+                          deleted_session.SessInptNo && deleted_session.SessInptNo != 0
+                            ? deleted_session.SessInptNo
+                            : "SUSPENDED"
+                        }}</span
+                      >
+                    </td>
+                    <td class="text-center bk-bg">
+                      <span
+                        [ngClass]="{
+                          suspn: deleted_session.SessInptYes == 0
+                        }"
+                        >{{
+                          deleted_session.SessInptYes && deleted_session.SessInptYes != 0
+                            ? deleted_session.SessInptYes
+                            : "SUSPENDED"
+                        }}</span
+                      >
+                    </td>
+                    <td class="text-right">
+                      <button
+                        class="btn btn-sm btn-info mx-1"
+                        (click)="deleteSession(deleted_session, '0')"
+                      >
+                        <i class="fa fa-thumbs-up"></i> Restore
+                      </button>
+                      <button class="btn btn-sm btn-danger mx-1">
+                        <i class="fa fa-trash"></i> Complete
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+                </table>
+              </div>
+            </div>
+            <!--  tab end -->
+          </div>
+          <!-- fixed sidebar -->
+          <div class="sidebar-lock">
+            <button class="btn my-1 btn-sm btn-success">
+              <i class="fa fa-unlock"></i> All Lock</button
+            ><br />
+            <button class="btn my-1 btn-sm btn-{{ sessionData.s_locked && sessionData.s_locked.locked == 1 ? 'danger' : 'success' }}">
+              <i class="fa fa-{{ sessionData.s_locked && sessionData.s_locked == 1 ? 'unlock' : 'lock' }}"></i> S Locked
+            </button>
+          </div>
+          <!-- fixed sidebar -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

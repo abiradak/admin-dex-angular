@@ -1,0 +1,35 @@
+<div class="flash-msg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mt-3 mb-3">
+                    <div class="card-body">
+                        <form method="POST" action="https://admin.bet99.io/admin/flash/msg/add">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+                                    <label> Events </label>
+                                    <select class="form-control" name="event_id" required="">
+                                        <option selected="true" disabled=""> - Select Event - </option>
+                                        <option value="0"> All Pages </option>
+                                        <option value="30415755">Mumbai Indians v Sunrisers Hyderabad</option>
+                                        <option value="30416016">Nepal v Netherlands</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-md-8 col-sm-12 mt-2">
+                                    <label> Msg ( 2000 char. ) </label>
+                                    <input type="text" name="msg" class="form-control" required="" maxlength="2000">
+                                </div>
+                                <div class="col-lg-2 col-md-4 col-sm-12 mt-2 text-right">
+                                    <label class="w-100 d-none d-sm-none d-md-block d-lg-block d-xl-block" style="height: 24px;"></label>	
+                                    <button class="btn btn-success">Save 
+                                        <i class="fa fa-save"></i>
+                                    </button>
+                                </div>
+                            </div>	
+                        </form>
+                    </div>	
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

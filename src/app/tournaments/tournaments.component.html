@@ -1,0 +1,205 @@
+<div class="tournament">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tab-button text-center mt-3">
+          <button class="btn btn-sm btn-primary mx-1">
+            <i class="fa fa-filter"></i> Football
+          </button>
+          <button class="btn btn-sm btn-info mx-1">
+            <i class="fa fa-filter"></i> Tennis
+          </button>
+          <button class="btn btn-sm btn-success mx-1">
+            <i class="fa fa-filter"></i> Cricket
+          </button>
+        </div>
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <h3>Competitions</h3>
+            <button class="btn btn-info btn-sm ">
+              <i class="fa fa-soccer-ball-o"></i> New Tournament
+            </button>
+          </div>
+          <div class="card-body">
+            <!-- add new tournament -->
+            <div id="form-wrapper">
+              <form
+                id="form-add-sport"
+                class="mb-4 border"
+                method="POST"
+                enctype="multipart/form-data"
+              >
+                <div class="border-bottom p-3">
+                  <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 mt-2">
+                      <label> Sports </label>
+                      <select
+                        class="form-control"
+                        name="event_type_id"
+                        required=""
+                      >
+                        <option selected="true" disabled="">
+                          - Select Sport -
+                        </option>
+                        <option value="0">Card Games</option>
+                        <option value="1">Football</option>
+                        <option value="2">Tennis</option>
+                        <option value="4">Cricket</option>
+                      </select>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+                      <label> Competitions </label>
+                      <select
+                        class="form-control"
+                        id="competition-dropdown"
+                      ></select>
+                    </div>
+                    <div class="col-md-6 col-sm-12 mt-2">
+                      <label class="small">Competition ID ( Betfair )</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="competition_id"
+                        required=""
+                        minlength="4"
+                      />
+                    </div>
+                    <div class="col-md-6 col-sm-12 mt-2">
+                      <label class="small">Event ID ( Betfair )</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="event_id"
+                        required=""
+                        minlength="4"
+                      />
+                    </div>
+                    <div class="col-md-6 col-sm-12 mt-2">
+                      <label>Full Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="long_name"
+                        required=""
+                        minlength="4"
+                      />
+                    </div>
+                    <div class="col-md-6 col-sm-12 mt-2">
+                      <label>Short Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="short_name"
+                        required=""
+                        minlength="4"
+                      />
+                    </div>
+                    <div class="col-md-6 col-sm-12 mt-2">
+                      <div class="form-group">
+                        <label>Upload Image (800x450)</label>
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <span
+                              class="btn btn-secondary cstm-btn-bk btn-file"
+                            >
+                              Browse…
+                              <input
+                                type="file"
+                                name="display_picture"
+                                id="display_picture"
+                              />
+                            </span>
+                          </span>
+                          <input type="text" class="form-control" readonly="" />
+                        </div>
+                        <img id="img-upload" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-4 mb-4">
+                  <div class="col text-right">
+                    <button id="cancel-it" class="btn btn-danger btn-md mr-1">
+                      <i class="fa fa-window-close"></i> Cancel
+                    </button>
+                    <button id="save-it" class="btn btn-success btn-md mr-3">
+                      <i class="fa fa-save"></i> Save
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- add new tournament -->
+
+            <div class="row" *ngIf = "competetions">
+              <!-- single-component -->
+              <div class="col-md-4" *ngFor = "let comp of competetions">
+                <div class="card w-100">
+                  <div class="card-header edit-competition" data-id="410">
+                    <a href="#"
+                      ><h5 class="text-center p-0 m-0 mt-1">{{ comp.short_name }}</h5></a
+                    >
+                    <span
+                      class="bg- text-white p-1"
+                      style="
+                        position: absolute;
+                        top: 39px;
+                        right: 0px;
+                        transform: rotate(90deg);
+                        font-size: 8px;
+                        opacity: 0.8;
+                      "
+                      >Card Games</span
+                    >
+                    <span
+                      class="bg-success text-white p-1"
+                      style="
+                        position: absolute;
+                        top: 39px;
+                        right: 0px;
+                        transform: rotate(90deg);
+                        font-size: 8px;
+                        opacity: 0.8;
+                      "
+                      >Cricket</span
+                    >
+                  </div>
+                  <div
+                    class="card-body text-center edit-competition"
+                    data-id="410"
+                  >
+                    <a href="#"
+                      ><img
+                        style="height: 150px; width: auto; max-width: 100%"
+                        src="https://admin.bet99.io/images/uploads/default-1.png"
+                    /></a>
+                  </div>
+                  <a href="#" class="edit-competition" data-id="410"
+                    ><h6
+                      class="text-center p-2 m-0 m-2 small text-white navbar-bet99"
+                    >
+                      Lucky 7
+                    </h6></a
+                  >
+                  <div class="row pb-2">
+                    <div class="col text-center" data-id="410">
+                      <button class="btn btn-danger mr-1 btn-sm delete-it">
+                        <i class="fa fa-trash"></i>
+                        Delete
+                      </button>
+                      <button class="btn btn- btn-sm btn-success remove-it">
+                        <i class="fa fa-trash"></i> Remove From List
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- single-component -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
